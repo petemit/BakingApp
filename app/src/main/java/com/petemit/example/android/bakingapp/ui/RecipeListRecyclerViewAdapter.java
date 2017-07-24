@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.petemit.example.android.bakingapp.R;
+import com.petemit.example.android.bakingapp.Recipe;
+
+import java.util.ArrayList;
 
 /**
  * Created by Peter on 7/21/2017.
@@ -15,7 +18,7 @@ import com.petemit.example.android.bakingapp.R;
 
 public class RecipeListRecyclerViewAdapter extends
         RecyclerView.Adapter<RecipeListRecyclerViewAdapter.RecipeViewHolder> {
-        private Cursor mCursor;
+        private ArrayList<Recipe> mRecipeArraylist;
 
     @Override
     public RecipeListRecyclerViewAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent,
@@ -29,18 +32,20 @@ public class RecipeListRecyclerViewAdapter extends
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
-        mCursor.moveToPosition(position);
+       Recipe recipe= mRecipeArraylist.get(position);
+        holder.recipeName.setText(recipe.getName());
+
 
     }
-    public void swapCursor(Cursor c){
-        mCursor=c;
+    public void swapData(ArrayList<Recipe> recipes){
+        this.mRecipeArraylist=recipes;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (mCursor!=null &&mCursor.getCount()>0) {
-            return mCursor.getCount();
+        if (mRecipeArraylist!=null &&mRecipeArraylist.size()>0) {
+            return mRecipeArraylist.size();
 
         }
         else{

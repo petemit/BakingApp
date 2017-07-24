@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BakingApp</string>
     <string name="LoaderConfirmationString">did my loader work?</string>
+    <string name="RecipeListItem">Recipe List Item</string>
 </resources>

@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -31,8 +32,10 @@ public class MainActivity extends AppCompatActivity implements
     LoaderManager.LoaderCallbacks<String> {
     RecyclerView rv;
     RecipeListRecyclerViewAdapter adapter;
+    GridLayoutManager mLayoutManager;
 
     static int JSONLOADER = 100;
+    int gridlength=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +43,15 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         rv = (RecyclerView) findViewById(R.id.rv_recipe_list);
 
+        // Use a Grid Layout Manager
+        mLayoutManager = new GridLayoutManager(this,gridlength);
+        rv.setLayoutManager(mLayoutManager);
+
+
         adapter = new RecipeListRecyclerViewAdapter();
-        rv.setAdapter(adapter);
         getSupportLoaderManager().initLoader(JSONLOADER, null, this);
+        rv.setAdapter(adapter);
+
 
 
     }
@@ -60,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements
 
         Gson gson = new GsonBuilder().create();
         Recipe[] recipes = gson.fromJson(data, Recipe[].class);
+        ArrayList<Recipe> recipeArrayList=new ArrayList<Recipe>();
+        for (Recipe recipe:recipes
+             ) {
+            recipeArrayList.add(recipe);
+        }
+        adapter.swapData(recipeArrayList);
     }
 
     @Override
