@@ -19,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.petemit.example.android.bakingapp.db.BakingProvider;
 import com.petemit.example.android.bakingapp.ui.RecipeListRecyclerViewAdapter;
 import com.petemit.example.android.bakingapp.util.NetUtils;
+import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,8 +67,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
      Log.i("MainActivity",getString(R.string.LoaderConfirmationString));
-
-        Gson gson = new GsonBuilder().create();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer());
+        Gson gson = builder.create();
         Recipe[] recipes = gson.fromJson(data, Recipe[].class);
         ArrayList<Recipe> recipeArrayList=new ArrayList<Recipe>();
         for (Recipe recipe:recipes

@@ -1,10 +1,12 @@
 package com.petemit.example.android.bakingapp;
 
+import java.io.Serializable;
+
 /**
  * Created by Peter on 7/24/2017.
  */
 
-public class Step {
+public class Step implements Serializable {
     private String id;
     private String shortDescription;
     private String description;
