@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="small_screen_card_buffer">40dp</dimen>
+    <dimen name="small_screen_card_buffer">16dp</dimen>
     <dimen name="recipe_list_text_size">25sp</dimen>
+    <dimen name="small_screen_tiny_buffer">2dp</dimen>
+
 </resources>

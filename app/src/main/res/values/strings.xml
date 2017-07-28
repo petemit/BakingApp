@@ -11,4 +11,5 @@
     <string name="json_recipe_steps">steps</string>
     <string name="RecipeDetailListItemDummyText">Step Text</string>
     <string name="recipe_detail_listofingredients_dummytext">List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients</string>
+    <string name="StepDetailTransition">StepDetailTransition</string>
 </resources>

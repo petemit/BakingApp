@@ -2,6 +2,7 @@ package com.petemit.example.android.bakingapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * Created by Peter on 7/21/2017.
  */
 
-public class RecipeDetailActivity extends Activity {
+public class RecipeDetailActivity extends AppCompatActivity {
     LinearLayoutManager mLayoutManager;
     RecyclerView rv;
     RecipeDetailListRecyclerViewAdapter adapter;
