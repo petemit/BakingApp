@@ -1,5 +1,7 @@
 package com.petemit.example.android.bakingapp.util;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -8,10 +10,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.petemit.example.android.bakingapp.Ingredient;
+import com.petemit.example.android.bakingapp.R;
 import com.petemit.example.android.bakingapp.Recipe;
 import com.petemit.example.android.bakingapp.Step;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 /*
@@ -20,6 +22,10 @@ import java.util.ArrayList;
     reflect their identity.  
 * */
 public class RecipeDeserializer implements JsonDeserializer<Recipe> {
+    Context mContext;
+    public RecipeDeserializer(Context context){
+        mContext=context;
+    }
     @Override
     public Recipe deserialize(JsonElement json,
                               Type typeOfT,
@@ -27,16 +33,14 @@ public class RecipeDeserializer implements JsonDeserializer<Recipe> {
         JsonObject jo = (JsonObject) json;
         Recipe recipe=new Recipe();
         if (jo!=null){
-            recipe.setId(jo.get("id").getAsString());
-            recipe.setName(jo.get("name").getAsString());
-            recipe.setServings(jo.get("servings").getAsFloat());
-            recipe.setImage(jo.get("image").getAsString());
+            recipe.setId(jo.get(mContext.getString(R.string.json_recipe_id)).getAsString());
+            recipe.setName(jo.get(mContext.getString(R.string.json_recipe_name)).getAsString());
+            recipe.setServings(jo.get(mContext.getString(R.string.json_recipe_servings)).getAsFloat());
+            recipe.setImage(jo.get(mContext.getString(R.string.json_recipe_image)).getAsString());
 
 
-            JsonElement ingredients = jo.getAsJsonArray("ingredients");
-            JsonElement steps = jo.getAsJsonArray("steps");
-            recipe.setId(jo.get("id").getAsString());
-
+            JsonElement ingredients = jo.getAsJsonArray(mContext.getString(R.string.json_recipe_ingredients));
+            JsonElement steps = jo.getAsJsonArray(mContext.getString(R.string.json_recipe_steps));
 
             Gson gson= new GsonBuilder().create();
             Ingredient[] ingredientarray=gson.fromJson(ingredients, Ingredient[].class);

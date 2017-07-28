@@ -19,25 +19,27 @@ import java.util.ArrayList;
  */
 
 public class RecipeListRecyclerViewAdapter extends
-        RecyclerView.Adapter<RecipeListRecyclerViewAdapter.RecipeViewHolder>
-implements  View.OnClickListener{
+        RecyclerView.Adapter<RecipeListRecyclerViewAdapter.RecipeViewHolder> {
         private ArrayList<Recipe> mRecipeArraylist;
-        Recipe mRecipe;
+
+
 
     @Override
-    public RecipeListRecyclerViewAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                             int viewType) {
+    public RecipeListRecyclerViewAdapter.RecipeViewHolder onCreateViewHolder(
+            ViewGroup parent,
+            int viewType) {
+
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_listitem,parent,false);
         RecipeViewHolder recipeViewHolder=new RecipeViewHolder(v);
-        v.setOnClickListener(this);
         return recipeViewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
-        mRecipe= mRecipeArraylist.get(position);
-        holder.recipeName.setText(mRecipe.getName());
+        holder.bind(mRecipeArraylist.get(position));
+
 
 
 
@@ -58,20 +60,30 @@ implements  View.OnClickListener{
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent= new Intent(v.getContext(),RecipeDetailActivity.class);
-        intent.putExtra(v.getContext().getString(R.string.recipe_key_bundle),mRecipe);
-        v.getContext().startActivity(intent);
 
-    }
 
-    public class RecipeViewHolder extends RecyclerView.ViewHolder{
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    {
         final TextView recipeName;
+        Recipe mRecipe;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             recipeName=(TextView)itemView.findViewById(R.id.tv_recipe_listitem);
+        }
+
+        public void bind (Recipe recipe){
+
+            mRecipe=recipe;
+            recipeName.setText(mRecipe.getName());
+        }
+        @Override
+        public void onClick(View v) {
+            Intent intent= new Intent(v.getContext(),RecipeDetailActivity.class);
+            intent.putExtra(v.getContext().getString(R.string.recipe_key_bundle),mRecipe);
+            v.getContext().startActivity(intent);
+
         }
     }
 }

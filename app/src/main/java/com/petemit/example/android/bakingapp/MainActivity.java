@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<String> loader, String data) {
      Log.i("MainActivity",getString(R.string.LoaderConfirmationString));
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer());
+        builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer(this));
         Gson gson = builder.create();
         Recipe[] recipes = gson.fromJson(data, Recipe[].class);
         ArrayList<Recipe> recipeArrayList=new ArrayList<Recipe>();

@@ -3,4 +3,12 @@
     <string name="LoaderConfirmationString">did my loader work?</string>
     <string name="RecipeListItem">Recipe List Item</string>
     <string name="recipe_key_bundle">recipe</string>
+    <string name="json_recipe_id">id</string>
+    <string name="json_recipe_name">name</string>
+    <string name="json_recipe_servings">servings</string>
+    <string name="json_recipe_image">image</string>
+    <string name="json_recipe_ingredients">ingredients</string>
+    <string name="json_recipe_steps">steps</string>
+    <string name="RecipeDetailListItemDummyText">Step Text</string>
+    <string name="recipe_detail_listofingredients_dummytext">List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients</string>
 </resources>
