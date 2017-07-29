@@ -6,13 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.petemit.example.android.bakingapp.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv_recipe_detail_list"
-        >
+<fragment
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:name="com.petemit.example.android.bakingapp.RecipeDetailListFragment"
+    android:id="@+id/recipe_detail_list_fragment">
 
-    </android.support.v7.widget.RecyclerView>
-
+</fragment>
 
 </LinearLayout>
