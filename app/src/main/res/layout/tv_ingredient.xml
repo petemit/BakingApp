@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredient_linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingRight="@dimen/small_screen_card_buffer">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"></FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_recipe_detail_ingredients"
+        style="@style/StepTextStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:gravity="left"
+        android:maxLines="5"
+
+        android:paddingRight="@dimen/small_screen_icon_size"
+        tools:text="@string/recipe_detail_listofingredients_dummytext"
+
+
+        />
+
+    <TextView
+        android:id="@+id/tv_ingredients_detail_quantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        tools:text="1/2" />
+
+    <TextView
+        android:id="@+id/tv_ingredients_detail_measure"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+
+        tools:text="Cup" />
+</LinearLayout>
+

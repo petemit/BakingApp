@@ -12,4 +12,6 @@
     <string name="RecipeDetailListItemDummyText">Step Text</string>
     <string name="recipe_detail_listofingredients_dummytext">List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients \n List of Ingredients</string>
     <string name="StepDetailTransition">StepDetailTransition</string>
+    <string name="RecipeParagraphDetailListItemDummyText">This is the step details in paragraph form that is most likely going to be truncated</string>
+    <string name="ingredients">Ingredients</string>
 </resources>

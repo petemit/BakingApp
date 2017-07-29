@@ -1,9 +1,11 @@
 package com.petemit.example.android.bakingapp.ui;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.petemit.example.android.bakingapp.Ingredient;
@@ -21,6 +23,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
     private ArrayList<Step> mStepArrayList;
     private static final int INGREDIENTS = 0;
     private static final int ALL_OTHERS = 1;
+    private boolean ingredientsAdded=false;
     private ArrayList<Ingredient> mIngredientArrayList;
 
     public RecipeDetailListRecyclerViewAdapter(ArrayList<Ingredient> ingredients){
@@ -90,28 +93,52 @@ public class RecipeDetailListRecyclerViewAdapter extends
     public class RecipeDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView title;
+        final TextView detailtext;
+        final LinearLayout ingredientLayout;
+        Context context;
         Step mStep;
         public RecipeDetailViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             title=(TextView)itemView.findViewById(R.id.tv_recipe_detail_listitem);
+            detailtext=(TextView)itemView.findViewById(R.id.tv_recipe_detail_paragraph);
+            ingredientLayout=(LinearLayout) itemView.findViewById(R.id.ll_ingredient_parent);
+            context=itemView.getContext();
         }
 
         public void bindIngredients(ArrayList<Ingredient> ingredients){
             String ingredientstrings="";
+
             if( ingredients!= null) {
                 for (Ingredient i : ingredients
                         ) {
-                    ingredientstrings+=i.getIngredient()+"\n";
+                    LinearLayout ll=(LinearLayout)LayoutInflater.from(
+                            ingredientLayout.getContext()).inflate(
+                            R.layout.tv_ingredient,null);
+
+                    TextView tv_ing =(TextView)ll.
+                            findViewById(R.id.tv_recipe_detail_ingredients);
+                    TextView tv_quant =(TextView)ll.
+                            findViewById(R.id.tv_ingredients_detail_quantity);
+                    TextView tv_measure =(TextView)ll.
+                            findViewById(R.id.tv_ingredients_detail_measure);
+                    tv_ing.setText(i.getIngredient());
+                    tv_quant.setText((i.getQuantity())+"");
+                    tv_measure.setText(i.getMeasure());
+                    ingredientLayout.addView(ll);
+
+
 
                 }
-                title.setText(ingredientstrings);
+                //ingredients_tv.setText(ingredientstrings);
             }
         }
         public void bind(Step step){
 
               mStep = step;
             title.setText(mStep.getShortDescription());
+            detailtext.setText(mStep.getDescription());
+
 
         }
 

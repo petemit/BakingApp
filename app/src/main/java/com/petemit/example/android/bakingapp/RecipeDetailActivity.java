@@ -45,14 +45,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
 
                 adapter = new RecipeDetailListRecyclerViewAdapter(recipe.getIngredients());
-                Step blankstep=new Step();
-                ArrayList<Step> steps=recipe.getSteps();
-                steps.add(0,blankstep);
-                adapter.swapData(steps);
 
-                //insert view with ingredients
-                View v = LayoutInflater.from(this)
-                        .inflate(R.layout.recipe_detail_step,rv,false);
+                ArrayList<Step> steps=recipe.getSteps();
+                Step blankstep=new Step();
+                if (steps.get(0).getId()!=null){
+
+                }else{
+                    steps.add(0, blankstep);
+                }
+                adapter.swapData(steps);
 
                 rv.setAdapter(adapter);
             }
