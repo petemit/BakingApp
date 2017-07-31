@@ -14,4 +14,6 @@
     <string name="StepDetailTransition">StepDetailTransition</string>
     <string name="RecipeParagraphDetailListItemDummyText">This is the step details in paragraph form that is most likely going to be truncated</string>
     <string name="ingredients">Ingredients</string>
+    <string name="step_key">step</string>
+    <string name="step_recipe_instructions_dummytext">detailed recipe steps, detailed recipe steps, detailed recipe steps</string>
 </resources>

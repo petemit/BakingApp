@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements
      Log.i("MainActivity",getString(R.string.LoaderConfirmationString));
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer(this));
+
+        //I opted to use GSON to convert the JSON into my Java objects.
+        //I've discovered that there are some complexities with this I didn't
+        //anticipate--not sure if I'd use this again in the future if I had
+        //JSON like this.
         Gson gson = builder.create();
         Recipe[] recipes = gson.fromJson(data, Recipe[].class);
         ArrayList<Recipe> recipeArrayList=new ArrayList<Recipe>();

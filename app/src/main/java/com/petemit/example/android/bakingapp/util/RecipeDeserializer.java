@@ -35,7 +35,7 @@ public class RecipeDeserializer implements JsonDeserializer<Recipe> {
         if (jo!=null){
             recipe.setId(jo.get(mContext.getString(R.string.json_recipe_id)).getAsString());
             recipe.setName(jo.get(mContext.getString(R.string.json_recipe_name)).getAsString());
-            recipe.setServings(jo.get(mContext.getString(R.string.json_recipe_servings)).getAsFloat());
+            recipe.setServings(jo.get(mContext.getString(R.string.json_recipe_servings)).getAsString());
             recipe.setImage(jo.get(mContext.getString(R.string.json_recipe_image)).getAsString());
 
 

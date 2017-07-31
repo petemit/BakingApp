@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.petemit.example.android.bakingapp.MainActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/step_fragment_placeholder"
+        android:visibility="gone"></FrameLayout>
+
 <fragment
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,5 +19,6 @@
     android:id="@+id/recipe_detail_list_fragment">
 
 </fragment>
+
 
 </LinearLayout>

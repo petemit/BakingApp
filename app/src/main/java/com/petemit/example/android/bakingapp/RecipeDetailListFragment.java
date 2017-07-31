@@ -1,5 +1,6 @@
 package com.petemit.example.android.bakingapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,17 +19,20 @@ import java.util.ArrayList;
  * Created by Peter on 7/29/2017.
  */
 
-public class RecipeDetailListFragment extends Fragment {
+public class RecipeDetailListFragment extends Fragment  {
     LinearLayoutManager mLayoutManager;
     RecyclerView rv;
     RecipeDetailListRecyclerViewAdapter adapter;
     private String TAG="RecipeDetailListFragment";
+    RecipeDetailListRecyclerViewAdapter.StepListener mStepCallBack;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootview= inflater.inflate (R.layout.fragment_recipe_detail_list,container,false);
         RecipeDetailActivity activity=(RecipeDetailActivity)getActivity();
         Recipe recipe=activity.getRecipe();
+        activity.setIngredientState(false);
 
                 rv = (RecyclerView) rootview.findViewById(R.id.rv_recipe_detail_list);
 
@@ -36,7 +40,8 @@ public class RecipeDetailListFragment extends Fragment {
                 mLayoutManager = new LinearLayoutManager(getContext());
                 rv.setLayoutManager(mLayoutManager);
 
-                adapter = new RecipeDetailListRecyclerViewAdapter(recipe.getIngredients());
+                adapter = new RecipeDetailListRecyclerViewAdapter(recipe.getIngredients(),
+                        activity, activity);
 
                 ArrayList<Step> steps=recipe.getSteps();
                 Step blankstep=new Step();
@@ -50,6 +55,18 @@ public class RecipeDetailListFragment extends Fragment {
                 rv.setAdapter(adapter);
 
         return rootview;
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try { mStepCallBack= (RecipeDetailListRecyclerViewAdapter.StepListener) context;
+
+        } catch (ClassCastException e ) {
+            throw new ClassCastException(context.toString()+
+                    " must implement StepListener");
+        }
 
     }
 }

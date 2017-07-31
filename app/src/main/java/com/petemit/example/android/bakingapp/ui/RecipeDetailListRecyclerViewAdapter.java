@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.petemit.example.android.bakingapp.Ingredient;
 import com.petemit.example.android.bakingapp.R;
+import com.petemit.example.android.bakingapp.RecipeDetailListFragment;
 import com.petemit.example.android.bakingapp.Step;
 
 import java.util.ArrayList;
@@ -23,12 +24,31 @@ public class RecipeDetailListRecyclerViewAdapter extends
     private ArrayList<Step> mStepArrayList;
     private static final int INGREDIENTS = 0;
     private static final int ALL_OTHERS = 1;
-    private boolean ingredientsAdded=false;
     private ArrayList<Ingredient> mIngredientArrayList;
+   StepListener mStepListener;
+    ingredientsAddedInterface ingredientsAdder;
 
-    public RecipeDetailListRecyclerViewAdapter(ArrayList<Ingredient> ingredients){
-        mIngredientArrayList=ingredients;
+    //this class is for handling the RecyclerView for the recipe detail list
+    public RecipeDetailListRecyclerViewAdapter(ArrayList<Ingredient> ingredients,
+                                               StepListener listener,
+                                                ingredientsAddedInterface ingredientsAdd ) {
+        mIngredientArrayList = ingredients;
+        mStepListener=listener;
+        ingredientsAdder=ingredientsAdd;
+    }
 
+    //this is an interface that is implemented by the recipe detail activity.  It has a callback
+    //allowing for the onclick to be implemented by the recipe detail activity.
+    //This allows communication to other fragments.
+    public interface StepListener{
+        void onStepSelected(Step step);
+    }
+
+    //this became necessary to implement because the ingredients were getting added twice
+    //inconsistently
+    public interface ingredientsAddedInterface{
+        public boolean getIngredientState();
+        public void setIngredientState(Boolean bool);
     }
 
 
@@ -36,14 +56,13 @@ public class RecipeDetailListRecyclerViewAdapter extends
     public RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder onCreateViewHolder(
             ViewGroup parent, int viewType) {
 
-        if (viewType==INGREDIENTS){
+        if (viewType == INGREDIENTS) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_detail_ingredients, parent, false);
             RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder recipeDetailViewHolder =
                     new RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder(v);
             return recipeDetailViewHolder;
-        }
-        else {
+        } else {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_detail_step, parent, false);
             RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder recipeDetailViewHolder =
@@ -54,10 +73,9 @@ public class RecipeDetailListRecyclerViewAdapter extends
 
     @Override
     public int getItemViewType(int position) {
-        if (position==0){
+        if (position == 0) {
             return INGREDIENTS;
-        }
-        else {
+        } else {
             return ALL_OTHERS;
         }
     }
@@ -65,10 +83,9 @@ public class RecipeDetailListRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder holder,
                                  int position) {
-        if (position==0){
+        if (position == 0) {
             holder.bindIngredients(mIngredientArrayList);
-        }
-        else{
+        } else {
 
             holder.bind(mStepArrayList.get(position));
         }
@@ -77,19 +94,19 @@ public class RecipeDetailListRecyclerViewAdapter extends
 
     @Override
     public int getItemCount() {
-        if (mStepArrayList!=null &&mStepArrayList.size()>0) {
+        if (mStepArrayList != null && mStepArrayList.size() > 0) {
             return mStepArrayList.size();
 
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
-    public void swapData(ArrayList<Step> stepArrayList){
-        mStepArrayList=stepArrayList;
+    public void swapData(ArrayList<Step> stepArrayList) {
+        mStepArrayList = stepArrayList;
         notifyDataSetChanged();
     }
+
     public class RecipeDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView title;
@@ -97,45 +114,46 @@ public class RecipeDetailListRecyclerViewAdapter extends
         final LinearLayout ingredientLayout;
         Context context;
         Step mStep;
+
         public RecipeDetailViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            title=(TextView)itemView.findViewById(R.id.tv_recipe_detail_listitem);
-            detailtext=(TextView)itemView.findViewById(R.id.tv_recipe_detail_paragraph);
-            ingredientLayout=(LinearLayout) itemView.findViewById(R.id.ll_ingredient_parent);
-            context=itemView.getContext();
+            title = (TextView) itemView.findViewById(R.id.tv_recipe_detail_listitem);
+            detailtext = (TextView) itemView.findViewById(R.id.tv_recipe_detail_paragraph);
+            ingredientLayout = (LinearLayout) itemView.findViewById(R.id.ll_ingredient_parent);
+            context = itemView.getContext();
         }
 
-        public void bindIngredients(ArrayList<Ingredient> ingredients){
-            String ingredientstrings="";
+        public void bindIngredients(ArrayList<Ingredient> ingredients) {
+            String ingredientstrings = "";
 
-            if( ingredients!= null) {
+            if (ingredients != null&& !ingredientsAdder.getIngredientState()) {
                 for (Ingredient i : ingredients
                         ) {
-                    LinearLayout ll=(LinearLayout)LayoutInflater.from(
+                    LinearLayout ll = (LinearLayout) LayoutInflater.from(
                             ingredientLayout.getContext()).inflate(
-                            R.layout.tv_ingredient,null);
+                            R.layout.tv_ingredient, null);
 
-                    TextView tv_ing =(TextView)ll.
+                    TextView tv_ing = (TextView) ll.
                             findViewById(R.id.tv_recipe_detail_ingredients);
-                    TextView tv_quant =(TextView)ll.
+                    TextView tv_quant = (TextView) ll.
                             findViewById(R.id.tv_ingredients_detail_quantity);
-                    TextView tv_measure =(TextView)ll.
+                    TextView tv_measure = (TextView) ll.
                             findViewById(R.id.tv_ingredients_detail_measure);
                     tv_ing.setText(i.getIngredient());
-                    tv_quant.setText((i.getQuantity())+"");
+                    tv_quant.setText((i.getQuantity()));
                     tv_measure.setText(i.getMeasure());
                     ingredientLayout.addView(ll);
-
+                    ingredientsAdder.setIngredientState(true);
 
 
                 }
-                //ingredients_tv.setText(ingredientstrings);
             }
         }
-        public void bind(Step step){
 
-              mStep = step;
+        public void bind(Step step) {
+
+            mStep = step;
             title.setText(mStep.getShortDescription());
             detailtext.setText(mStep.getDescription());
 
@@ -144,7 +162,10 @@ public class RecipeDetailListRecyclerViewAdapter extends
 
         @Override
         public void onClick(View v) {
+            mStepListener.onStepSelected(mStep);
 
         }
     }
+
+
 }
