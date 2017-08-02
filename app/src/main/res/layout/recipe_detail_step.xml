@@ -19,9 +19,11 @@
     <ImageView
         android:layout_width="@dimen/small_screen_icon_size"
         android:layout_height="@dimen/small_screen_icon_size"
+        android:id="@+id/iv_recipe_detail_list_thumbnail"
 
         android:layout_gravity="center"
-        android:background="@drawable/ic_lens_24dp"/>
+       />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -63,6 +65,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/ic_movie_24dp"
+            android:id="@+id/recipe_detail_list_video_marker"
 
             />
     </LinearLayout>

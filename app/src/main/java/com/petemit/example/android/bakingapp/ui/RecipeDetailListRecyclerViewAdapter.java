@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.petemit.example.android.bakingapp.Ingredient;
 import com.petemit.example.android.bakingapp.R;
 import com.petemit.example.android.bakingapp.RecipeDetailListFragment;
 import com.petemit.example.android.bakingapp.Step;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -86,8 +88,12 @@ public class RecipeDetailListRecyclerViewAdapter extends
         if (position == 0) {
             holder.bindIngredients(mIngredientArrayList);
         } else {
-
-            holder.bind(mStepArrayList.get(position));
+            if(position!=getItemCount()-1) {
+                holder.bind(mStepArrayList.get(position - 1));
+            }
+            else{
+                holder.bind(mStepArrayList.get(position));
+            }
         }
 
     }
@@ -113,7 +119,9 @@ public class RecipeDetailListRecyclerViewAdapter extends
         final TextView detailtext;
         final LinearLayout ingredientLayout;
         Context context;
+        ImageView thumbnail;
         Step mStep;
+        ImageView videoStepMarkerIv;
 
         public RecipeDetailViewHolder(View itemView) {
             super(itemView);
@@ -121,6 +129,8 @@ public class RecipeDetailListRecyclerViewAdapter extends
             title = (TextView) itemView.findViewById(R.id.tv_recipe_detail_listitem);
             detailtext = (TextView) itemView.findViewById(R.id.tv_recipe_detail_paragraph);
             ingredientLayout = (LinearLayout) itemView.findViewById(R.id.ll_ingredient_parent);
+             thumbnail = (ImageView)itemView.findViewById(R.id.iv_recipe_detail_list_thumbnail);
+            videoStepMarkerIv=(ImageView)itemView.findViewById(R.id.recipe_detail_list_video_marker);
             context = itemView.getContext();
         }
 
@@ -156,6 +166,23 @@ public class RecipeDetailListRecyclerViewAdapter extends
             mStep = step;
             title.setText(mStep.getShortDescription());
             detailtext.setText(mStep.getDescription());
+            if (step.getThumbnailURL()!=null && step.getThumbnailURL()!=""){
+                Picasso.with(context).load(step.getThumbnailURL()).fit().centerCrop()
+                .placeholder(R.drawable.ic_image_24dp)
+                .error(R.drawable.ic_error_outline_24dp)
+                .into(thumbnail);
+            }
+
+            else{
+                thumbnail.setImageResource(R.drawable.ic_image_24dp);
+            }
+            if (step.getVideoURL()!=null && step.getVideoURL()!=""){
+                videoStepMarkerIv.setVisibility(View.VISIBLE);
+            }
+            else{
+                videoStepMarkerIv.setVisibility(View.INVISIBLE);
+            }
+
 
 
         }
