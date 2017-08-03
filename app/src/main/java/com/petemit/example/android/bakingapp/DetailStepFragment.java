@@ -23,6 +23,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -82,6 +83,7 @@ public class DetailStepFragment extends Fragment {
                     simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
 
                     mExoplayer.setPlayer(simpleExoPlayer);
+
                     simpleExoPlayer.prepare(videoSource);
 
                 }

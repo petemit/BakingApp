@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="custom_exo_width">100dp</dimen>
+    <dimen name="custom_exo_height">100dp</dimen>
 </resources>
