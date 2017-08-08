@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -43,26 +44,42 @@ public class DetailStepFragment extends Fragment {
     TextView tv_recipe_instructions;
     SimpleExoPlayerView mExoplayer;
     SimpleExoPlayer simpleExoPlayer;
+    Button leftStepButton;
+    Button rightStepButton;
+    RecipeDetailActivity parent;
+    Step previousStep;
+    Step nextStep;
+    Step thisStep;
 
+
+    //This interface is implemented by the List adapter so it can provide the next and previous
+    //steps in the arraylist
+    public interface StepGetter{
+        Step getNextStep(Step s);
+        Step getPreviousStep(Step s);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_step, container, false);
         tv_recipe_instructions =(TextView)rootview.findViewById(R.id.step_recipe_instructions);
         mExoplayer=(SimpleExoPlayerView)rootview.findViewById(R.id.step_video_view);
+        leftStepButton=(Button)rootview.findViewById(R.id.previous_step_button);
+        rightStepButton=(Button)rootview.findViewById(R.id.next_step_button);
+        parent=(RecipeDetailActivity)getActivity();
 
 
         Bundle bundle=getArguments();
 
         if (bundle!=null){
             if (bundle.get(getString(R.string.step_key))!=null){
-                Step step =(Step)bundle.get(getString(R.string.step_key));
-                tv_recipe_instructions.setText(step.getDescription());
-                if (step.getVideoURL()!=null && step.getVideoURL()!=""){
+                thisStep =(Step)bundle.get(getString(R.string.step_key));
+                tv_recipe_instructions.setText(thisStep.getDescription());
+                if (thisStep.getVideoURL()!=null && thisStep.getVideoURL()!=""){
                     Uri uri;
 
 
                     try {
-                      uri = Uri.parse(step.getVideoURL());
+                      uri = Uri.parse(thisStep.getVideoURL());
                     }
                     catch (ParseException u){
                         u.printStackTrace();
@@ -85,6 +102,43 @@ public class DetailStepFragment extends Fragment {
                     mExoplayer.setPlayer(simpleExoPlayer);
 
                     simpleExoPlayer.prepare(videoSource);
+
+
+                    //try getting the previous step
+                    if (thisStep.getStepGetter().getPreviousStep(thisStep)!=null){
+                        previousStep=thisStep.getStepGetter().getPreviousStep(thisStep);
+
+                        leftStepButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                parent.onStepSelected(previousStep,
+                                        tv_recipe_instructions,thisStep.getStepGetter()
+                                );
+
+                            }
+                        });
+
+                    }
+                    else{
+                        leftStepButton.setVisibility(View.INVISIBLE);
+                    }
+                    //try getting the next step
+                    if (thisStep.getStepGetter().getNextStep(thisStep)!=null){
+                        nextStep=thisStep.getStepGetter().getNextStep(thisStep);
+                        rightStepButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                parent.onStepSelected(nextStep,
+                                        tv_recipe_instructions,thisStep.getStepGetter()
+                                );
+
+                            }
+                        });
+
+                    }
+                    else{
+                        rightStepButton.setVisibility(View.INVISIBLE);
+                    }
 
                 }
                 else{

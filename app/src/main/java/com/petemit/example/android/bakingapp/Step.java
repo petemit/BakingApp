@@ -12,6 +12,7 @@ public class Step implements Serializable {
     private String description;
     private String videoURL;
     private String thumbnailURL;
+    private DetailStepFragment.StepGetter stepGetter;
 
     public String getId() {
         return id;
@@ -31,5 +32,13 @@ public class Step implements Serializable {
 
     public String getThumbnailURL() {
         return thumbnailURL;
+    }
+
+    public DetailStepFragment.StepGetter getStepGetter() {
+        return stepGetter;
+    }
+
+    public void setStepGetter(DetailStepFragment.StepGetter stepGetter) {
+        this.stepGetter = stepGetter;
     }
 }

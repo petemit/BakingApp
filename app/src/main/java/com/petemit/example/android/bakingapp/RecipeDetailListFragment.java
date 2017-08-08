@@ -25,6 +25,7 @@ public class RecipeDetailListFragment extends Fragment  {
     RecipeDetailListRecyclerViewAdapter adapter;
     private String TAG="RecipeDetailListFragment";
     RecipeDetailListRecyclerViewAdapter.StepListener mStepCallBack;
+    ArrayList<Step> steps;
 
 
     @Override
@@ -43,7 +44,7 @@ public class RecipeDetailListFragment extends Fragment  {
                 adapter = new RecipeDetailListRecyclerViewAdapter(recipe.getIngredients(),
                         activity, activity);
 
-                ArrayList<Step> steps=recipe.getSteps();
+                steps=recipe.getSteps();
                 Step blankstep=new Step();
                 if (steps.get(0).getId()!=null){
 

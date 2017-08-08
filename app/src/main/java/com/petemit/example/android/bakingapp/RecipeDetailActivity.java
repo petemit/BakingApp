@@ -32,6 +32,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         RecipeDetailListRecyclerViewAdapter.StepListener,
         RecipeDetailListRecyclerViewAdapter.ingredientsAddedInterface {
 
+
+
     private Recipe recipe;
     FragmentManager fragmentManager;
     DetailStepFragment stepFragment;
@@ -74,7 +76,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onStepSelected(Step step, View stepTextView) {
+    public void onStepSelected(Step step, View stepTextView,
+                               DetailStepFragment.StepGetter stepGetter) {
         fragmentManager = getSupportFragmentManager();
         stepFragment = new DetailStepFragment();
         MasterListFragment=fragmentManager.findFragmentById(R.id.recipe_detail_list_fragment);
@@ -83,6 +86,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             MasterListFragment.setExitTransition(new Fade());
         }
         Bundle bundle = new Bundle();
+        step.setStepGetter(stepGetter);
         bundle.putSerializable(getString(R.string.step_key), step);
         View v = findViewById(R.id.step_fragment_placeholder);
         v.setVisibility(View.VISIBLE);
