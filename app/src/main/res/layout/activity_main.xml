@@ -5,6 +5,17 @@
     android:layout_height="match_parent"
     tools:context="com.petemit.example.android.bakingapp.MainActivity">
 
+ <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="@dimen/small_screen_card_buffer"
+     android:layout_marginLeft="@dimen/small_screen_card_buffer"
+     android:layout_marginRight="@dimen/small_screen_card_buffer"
+     android:text="@string/internet_error_msg"
+     android:visibility="gone"
+     android:id="@+id/internet_error_msg"
+     style="@style/StepTextStyleBig"/>
+
  <android.support.v7.widget.RecyclerView
      android:layout_width="match_parent"
      android:layout_height="match_parent"

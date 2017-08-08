@@ -1,11 +1,21 @@
 package com.petemit.example.android.bakingapp;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -25,6 +35,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     private Recipe recipe;
     FragmentManager fragmentManager;
     DetailStepFragment stepFragment;
+    Fragment MasterListFragment;
     public static boolean ingredientState;
 
     private String TAG = "RecipeDetailActivity";
@@ -32,6 +43,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Grab the recipe before we inflate the MasterListfragment. The MasterListfragment is going to be using this
         //recipe object to fill out its data.
         Log.i(TAG, "Launched successfully");
@@ -62,19 +74,39 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onStepSelected(Step step) {
+    public void onStepSelected(Step step, View stepTextView) {
         fragmentManager = getSupportFragmentManager();
         stepFragment = new DetailStepFragment();
+        MasterListFragment=fragmentManager.findFragmentById(R.id.recipe_detail_list_fragment);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            stepFragment.setEnterTransition(new Fade());
+            MasterListFragment.setExitTransition(new Fade());
+        }
         Bundle bundle = new Bundle();
         bundle.putSerializable(getString(R.string.step_key), step);
+        View v = findViewById(R.id.step_fragment_placeholder);
+        v.setVisibility(View.VISIBLE);
+
         stepFragment.setArguments((bundle));
         //   fragmentManager.beginTransaction().add(R.id.step_fragment_placeholder,
         //         stepFragment).commit();
-        FragmentTransaction transaction = fragmentManager.beginTransaction().replace(R.id.step_fragment_placeholder, stepFragment);
+
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction()
+                .addSharedElement(stepTextView,getString(R.string.StepDetailTransition))
+                .replace(R.id.step_fragment_placeholder, stepFragment);
+
+
+
+//        transition logic
+//        Transition changeTransform = TransitionInflater.from(this).
+//                inflateTransition(R.transition.step_to_fragment_transition);
+//        Transition explodeTransform = TransitionInflater.from(this).
+//                inflateTransition(android.R.transition.explode);
+
         transaction.addToBackStack(null);
         transaction.commit();
-        View v = findViewById(R.id.step_fragment_placeholder);
-        v.setVisibility(View.VISIBLE);
+
 
 
     }
@@ -99,5 +131,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     public void setIngredientState(Boolean bool) {
         ingredientState = bool;
+    }
+
+    public class StepTransition extends TransitionSet{
+        public StepTransition() {
+            setOrdering(ORDERING_TOGETHER);
+            addTransition(new ChangeBounds())
+                    .addTransition(new ChangeTransform())
+                    .addTransition(new ChangeImageTransform());
+        }
     }
 }

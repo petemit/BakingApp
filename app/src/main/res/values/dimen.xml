@@ -4,6 +4,6 @@
     <dimen name="small_screen_card_buffer">16dp</dimen>
     <dimen name="recipe_list_text_size">25sp</dimen>
     <dimen name="small_screen_tiny_buffer">2dp</dimen>
-    <dimen name="small_screen_card_height">70dp</dimen>
+    <dimen name="small_screen_card_height">100dp</dimen>
 
 </resources>

@@ -39,10 +39,31 @@
         style="@style/StepTextStyleBig"
         android:layout_marginLeft="@dimen/small_screen_card_buffer"
         android:layout_marginRight="@dimen/small_screen_card_buffer"
+        android:layout_marginTop="@dimen/steptext_top_margin"
         android:layout_height="wrap_content"
+        android:transitionName="@string/StepDetailTransition"
         android:id="@+id/step_recipe_instructions"
         tools:text="@string/step_recipe_instructions_dummytext"/>
 
     </android.support.v7.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="@dimen/step_button_width"
+            android:layout_height="@dimen/step_button_height"
+            android:background="@drawable/ic_arrow_back_24dp"
+            android:layout_alignParentLeft="true"
+            />
+        <Button
+            android:layout_width="@dimen/step_button_width"
+            android:layout_height="@dimen/step_button_height"
+            android:background="@drawable/ic_arrow_forward_24dp"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
 </LinearLayout>
 </ScrollView>

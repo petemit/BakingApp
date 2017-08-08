@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="custom_exo_width">100dp</dimen>
-    <dimen name="custom_exo_height">100dp</dimen>
+    <dimen name="custom_exo_width">40dp</dimen>
+    <dimen name="custom_exo_height">40dp</dimen>
+    <dimen name="steptext_top_margin">20dp</dimen>
+    <dimen name="step_button_width">60dp</dimen>
+    <dimen name="step_button_height">40dp</dimen>
 </resources>

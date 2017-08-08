@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:transitionName="@string/StepDetailTransition"
                 android:gravity="left"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
                 tools:text="@string/RecipeParagraphDetailListItemDummyText"
 

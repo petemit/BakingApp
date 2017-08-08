@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements
     RecyclerView rv;
     RecipeListRecyclerViewAdapter adapter;
     GridLayoutManager mLayoutManager;
+    TextView errTextView;
 
     static int JSONLOADER = 100;
     int gridlength=1;
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        errTextView=(TextView)findViewById(R.id.internet_error_msg);
         rv = (RecyclerView) findViewById(R.id.rv_recipe_list);
 
         // Use a Grid Layout Manager
@@ -70,18 +74,26 @@ public class MainActivity extends AppCompatActivity implements
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer(this));
 
-        //I opted to use GSON to convert the JSON into my Java objects.
-        //I've discovered that there are some complexities with this I didn't
-        //anticipate--not sure if I'd use this again in the future if I had
-        //JSON like this.
-        Gson gson = builder.create();
-        Recipe[] recipes = gson.fromJson(data, Recipe[].class);
-        ArrayList<Recipe> recipeArrayList=new ArrayList<Recipe>();
-        for (Recipe recipe:recipes
-             ) {
-            recipeArrayList.add(recipe);
+        if (data==""){
+            errTextView.setVisibility(View.VISIBLE);
         }
-        adapter.swapData(recipeArrayList);
+        else {
+            errTextView.setVisibility(View.GONE);
+
+            //I opted to use GSON to convert the JSON into my Java objects.
+            //I've discovered that there are some complexities with this I didn't
+            //anticipate--not sure if I'd use this again in the future if I had
+            //JSON like this.
+            Gson gson = builder.create();
+            Recipe[] recipes = gson.fromJson(data, Recipe[].class);
+            ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
+            for (Recipe recipe : recipes
+                    ) {
+                recipeArrayList.add(recipe);
+            }
+            adapter.swapData(recipeArrayList);
+        }
+
     }
 
     @Override

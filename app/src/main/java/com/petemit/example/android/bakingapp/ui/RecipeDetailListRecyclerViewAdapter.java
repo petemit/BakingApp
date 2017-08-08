@@ -43,7 +43,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
     //allowing for the onclick to be implemented by the recipe detail activity.
     //This allows communication to other fragments.
     public interface StepListener{
-        void onStepSelected(Step step);
+        void onStepSelected(Step step, View v);
     }
 
     //this became necessary to implement because the ingredients were getting added twice
@@ -189,7 +189,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
 
         @Override
         public void onClick(View v) {
-            mStepListener.onStepSelected(mStep);
+            mStepListener.onStepSelected(mStep,detailtext);
 
         }
     }
