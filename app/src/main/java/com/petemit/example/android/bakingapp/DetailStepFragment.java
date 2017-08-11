@@ -46,10 +46,14 @@ public class DetailStepFragment extends Fragment {
     SimpleExoPlayer simpleExoPlayer;
     Button leftStepButton;
     Button rightStepButton;
+    View leftStepLayoutView;
+    View rightStepLayoutView;
     RecipeDetailActivity parent;
     Step previousStep;
     Step nextStep;
     Step thisStep;
+    int screenWidth;
+    int currentOrientation;
 
 
     //This interface is implemented by the List adapter so it can provide the next and previous
@@ -65,7 +69,12 @@ public class DetailStepFragment extends Fragment {
         mExoplayer=(SimpleExoPlayerView)rootview.findViewById(R.id.step_video_view);
         leftStepButton=(Button)rootview.findViewById(R.id.previous_step_button);
         rightStepButton=(Button)rootview.findViewById(R.id.next_step_button);
+        leftStepLayoutView=rootview.findViewById(R.id.step_left_button_layout);
+        rightStepLayoutView=rootview.findViewById(R.id.step_right_button_layout);
         parent=(RecipeDetailActivity)getActivity();
+
+        screenWidth=getResources().getConfiguration().smallestScreenWidthDp;
+        currentOrientation = getResources().getConfiguration().orientation;
 
 
         Bundle bundle=getArguments();
@@ -104,45 +113,55 @@ public class DetailStepFragment extends Fragment {
                     simpleExoPlayer.prepare(videoSource);
 
 
-                    //try getting the previous step
-                    if (thisStep.getStepGetter().getPreviousStep(thisStep)!=null){
-                        previousStep=thisStep.getStepGetter().getPreviousStep(thisStep);
 
-                        leftStepButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                parent.onStepSelected(previousStep,
-                                        tv_recipe_instructions,thisStep.getStepGetter()
-                                );
-
-                            }
-                        });
-
-                    }
-                    else{
-                        leftStepButton.setVisibility(View.INVISIBLE);
-                    }
-                    //try getting the next step
-                    if (thisStep.getStepGetter().getNextStep(thisStep)!=null){
-                        nextStep=thisStep.getStepGetter().getNextStep(thisStep);
-                        rightStepButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                parent.onStepSelected(nextStep,
-                                        tv_recipe_instructions,thisStep.getStepGetter()
-                                );
-
-                            }
-                        });
-
-                    }
-                    else{
-                        rightStepButton.setVisibility(View.INVISIBLE);
-                    }
 
                 }
                 else{
                     mExoplayer.setVisibility(View.GONE);
+                }
+
+                //try getting the previous step
+                //No step buttons if in landscape tablet mode
+                if (thisStep.getStepGetter()!=null&& (!(screenWidth>=getResources().
+                        getInteger(R.integer.tablet_screen_width))&&
+                        (!(currentOrientation==
+                                getResources().
+                                        getConfiguration().ORIENTATION_LANDSCAPE)))) {
+                    if (thisStep.getStepGetter().getPreviousStep(thisStep) != null) {
+                        previousStep = thisStep.getStepGetter().getPreviousStep(thisStep);
+
+                        leftStepButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                parent.onStepSelected(previousStep, thisStep.getStepGetter()
+                                );
+
+                            }
+                        });
+
+                    } else {
+                        leftStepLayoutView.setVisibility(View.INVISIBLE);
+
+                    }
+                    //try getting the next step
+                    if (thisStep.getStepGetter().getNextStep(thisStep) != null) {
+                        nextStep = thisStep.getStepGetter().getNextStep(thisStep);
+                        rightStepButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                parent.onStepSelected(nextStep, thisStep.getStepGetter()
+                                );
+
+                            }
+                        });
+
+                    } else {
+                        rightStepLayoutView.setVisibility(View.INVISIBLE);
+                    }
+                }
+                else{
+                    leftStepLayoutView.setVisibility(View.INVISIBLE);
+                    rightStepLayoutView.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -155,8 +174,10 @@ public class DetailStepFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if(simpleExoPlayer!=null) {
+            simpleExoPlayer.stop();
             simpleExoPlayer.release();
         }
 
     }
+
 }

@@ -2,6 +2,7 @@ package com.petemit.example.android.bakingapp;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.transition.TransitionSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -39,6 +41,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     DetailStepFragment stepFragment;
     Fragment MasterListFragment;
     public static boolean ingredientState;
+    Step currentStep;
+    int screenWidth;
+    int currentOrientation;
 
     private String TAG = "RecipeDetailActivity";
 
@@ -60,8 +65,30 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         }
         setContentView(R.layout.activity_recipe_detail);
 
+        //Determine screen width
+        screenWidth=getResources().getConfiguration().smallestScreenWidthDp;
+        currentOrientation = getResources().getConfiguration().orientation;
+
+        //if using the tablet layout
+        if (screenWidth>=getResources().getInteger(R.integer.tablet_screen_width)&&
+                (currentOrientation==
+                        getResources().getConfiguration().ORIENTATION_LANDSCAPE)){
+            if (recipe!=null){
+                //return the first item of the array by default
+                Step defaultstep=(Step)recipe.getSteps().get(0);
+                onStepSelected(defaultstep,null);
+
+
+            }
+        }
+
         if (savedInstanceState != null) {
-            return;
+
+            Step step = (Step)savedInstanceState.get(getString(R.string.step_key));
+            if(step!=null) {
+                onStepSelected(step, step.getStepGetter());
+            }
+
         }
 
 
@@ -75,31 +102,43 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         this.recipe = recipe;
     }
 
+
+
     @Override
-    public void onStepSelected(Step step, View stepTextView,
+    public void onStepSelected(Step step,
                                DetailStepFragment.StepGetter stepGetter) {
-        fragmentManager = getSupportFragmentManager();
-        stepFragment = new DetailStepFragment();
-        MasterListFragment=fragmentManager.findFragmentById(R.id.recipe_detail_list_fragment);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            stepFragment.setEnterTransition(new Fade());
-            MasterListFragment.setExitTransition(new Fade());
-        }
-        Bundle bundle = new Bundle();
-        step.setStepGetter(stepGetter);
-        bundle.putSerializable(getString(R.string.step_key), step);
-        View v = findViewById(R.id.step_fragment_placeholder);
-        v.setVisibility(View.VISIBLE);
+        if (step!=null) {
+            currentStep=step;
+            fragmentManager = getSupportFragmentManager();
+            stepFragment = new DetailStepFragment();
+            MasterListFragment = fragmentManager.findFragmentById(R.id.recipe_detail_list_fragment);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                stepFragment.setEnterTransition(new Fade());
+                MasterListFragment.setExitTransition(new Fade());
+            }
+            Bundle bundle = new Bundle();
+            if(stepGetter!=null) {
+                step.setStepGetter(stepGetter);
+            }
+            bundle.putSerializable(getString(R.string.step_key), step);
 
-        stepFragment.setArguments((bundle));
-        //   fragmentManager.beginTransaction().add(R.id.step_fragment_placeholder,
-        //         stepFragment).commit();
+            if (!(screenWidth>getResources().getInteger(R.integer.tablet_screen_width))&&
+                    !((currentOrientation==
+                            getResources().getConfiguration().ORIENTATION_LANDSCAPE))) {
+                View v = findViewById(R.id.step_fragment_placeholder);
+                v.setVisibility(View.VISIBLE);
+            }
+
+            stepFragment.setArguments((bundle));
+
+            //Putting the Step into the bundle so it can be accessible by the onsavedinstancestate
+
+            //   fragmentManager.beginTransaction().add(R.id.step_fragment_placeholder,
+            //         stepFragment).commit();
 
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction()
-                .addSharedElement(stepTextView,getString(R.string.StepDetailTransition))
-                .replace(R.id.step_fragment_placeholder, stepFragment);
-
+            FragmentTransaction transaction = fragmentManager.beginTransaction()
+                    .replace(R.id.step_fragment_placeholder, stepFragment);
 
 
 //        transition logic
@@ -108,9 +147,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 //        Transition explodeTransform = TransitionInflater.from(this).
 //                inflateTransition(android.R.transition.explode);
 
-        transaction.addToBackStack(null);
-        transaction.commit();
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
 
+
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(currentStep!=null) {
+            outState.putSerializable(getString(R.string.step_key), currentStep);
+        }
 
 
     }
@@ -118,11 +168,21 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        View v = findViewById(R.id.step_fragment_placeholder);
         if (stepFragment!=null) {
-            if (stepFragment.getUserVisibleHint()) {
-                View v = findViewById(R.id.step_fragment_placeholder);
+            if (v.getVisibility()==View.VISIBLE) {
                 v.setVisibility(View.GONE);
+                getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();
+                currentStep = null;
             }
+            else{
+                getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();
+                finish();
+            }
+
+        }
+        else{
+            finish(); 
         }
 
     }
