@@ -1,5 +1,8 @@
 package com.petemit.example.android.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -20,6 +23,7 @@ import android.transition.TransitionSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
@@ -54,7 +58,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Grab the recipe before we inflate the MasterListfragment. The MasterListfragment is going to be using this
+        //Grab the recipe before we inflate the MasterListfragment.
+        //The MasterListfragment is going to be using this
         //recipe object to fill out its data.
         Log.i(TAG, "Launched successfully");
         if (getIntent() != null) {
@@ -64,6 +69,36 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                         getParcelableExtra(getString(R.string.recipe_key_bundle)));
                 stepArrayList=getRecipe().getSteps();
                 Log.i(TAG, getRecipe().getName());
+
+
+                //Set the widget if you've got one:
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                RemoteViews remotevs= new RemoteViews(this.getPackageName(),
+                        R.layout.ingredient_widget);
+                ComponentName widget=new ComponentName(this,IngredientWidgetProvider.class);
+                remotevs.setTextViewText(R.id.tv_recipe_detail_ingredients_title, "test");
+                appWidgetManager.updateAppWidget(widget,remotevs);
+
+                //implementation attempt 1
+//                int ids[] = AppWidgetManager.getInstance(getApplication())
+//                        .getAppWidgetIds((new ComponentName(getApplication(),
+//                                IngredientWidgetProvider.class)));
+//
+//
+//                //found some widget ids... proceed!
+//                if (ids!=null){
+//                    Intent intent = new Intent(this, IngredientWidgetProvider.class);
+//                    intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+//                    intent.putExtra(getString(R.string
+//                            .widget_recipe_id_key),recipe.getId());
+//                    intent.putExtra(getString(R.string
+//                            .widget_ingredients_key),recipe.getIngredients());
+//                    sendBroadcast(intent);
+//                }
+
+
+
 
             }
         }
@@ -119,7 +154,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     public Step getPreviousStep(Step s) {
         int position= FindPositionByStep(s);
-        //I must account for the ingredients list
+        //I must account for the ingredients list in the rv
         if (position >= 1) {
             return stepArrayList.get(position - 1);
 

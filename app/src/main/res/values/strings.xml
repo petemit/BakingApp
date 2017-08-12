@@ -22,4 +22,6 @@
     <string name="BakingAppName">BakingApp</string>
     <string name="dummy_measure">Cup</string>
     <string name="dummy_quantity">1/2</string>
+    <string name="widget_recipe_id_key">widgetrecipeid</string>
+    <string name="widget_ingredients_key">widgetingredients</string>
 </resources>

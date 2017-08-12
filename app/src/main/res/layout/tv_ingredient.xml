@@ -23,8 +23,6 @@
 
         android:paddingRight="@dimen/small_screen_icon_size"
         tools:text="@string/recipe_detail_listofingredients_dummytext"
-
-
         />
 
     <TextView
