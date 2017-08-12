@@ -37,9 +37,13 @@ public class MainActivity extends AppCompatActivity implements
     RecipeListRecyclerViewAdapter adapter;
     GridLayoutManager mLayoutManager;
     TextView errTextView;
+    int screenWidth;
+    int currentOrientation;
 
     static int JSONLOADER = 100;
-    int gridlength=1;
+    int gridlength=0;
+    public final static int PORTRAIT_GRID_LENGTH=1;
+    public final static int LANDSCAPE_TABLET_GRID_LENGTH=4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,20 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         errTextView=(TextView)findViewById(R.id.internet_error_msg);
         rv = (RecyclerView) findViewById(R.id.rv_recipe_list);
+
+
+        //Determine screen width
+        screenWidth=getResources().getConfiguration().smallestScreenWidthDp;
+        currentOrientation = getResources().getConfiguration().orientation;
+
+        //if using the tablet layout
+        if (screenWidth>=getResources().getInteger(R.integer.tablet_screen_width)&&
+                (currentOrientation==
+                        getResources().getConfiguration().ORIENTATION_LANDSCAPE)) {
+            gridlength=LANDSCAPE_TABLET_GRID_LENGTH;
+        }else{
+            gridlength=PORTRAIT_GRID_LENGTH;
+        }
 
         // Use a Grid Layout Manager
         mLayoutManager = new GridLayoutManager(this,gridlength);
