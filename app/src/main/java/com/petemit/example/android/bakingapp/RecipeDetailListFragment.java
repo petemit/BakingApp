@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Peter on 7/29/2017.
  */
 
-public class RecipeDetailListFragment extends Fragment  {
+public class RecipeDetailListFragment extends Fragment {
     LinearLayoutManager mLayoutManager;
     RecyclerView rv;
     RecipeDetailListRecyclerViewAdapter adapter;
@@ -57,6 +58,13 @@ public class RecipeDetailListFragment extends Fragment  {
 
         return rootview;
 
+    }
+
+    //This interface is implemented by the List adapter so it can provide the next and previous
+    //steps in the arraylist
+    public interface StepGetter{
+        Step getNextStep(Step s);
+        Step getPreviousStep(Step s);
     }
 
     @Override

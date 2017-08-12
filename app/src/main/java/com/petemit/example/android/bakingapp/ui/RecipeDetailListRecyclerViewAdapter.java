@@ -25,8 +25,7 @@ import java.util.ArrayList;
  */
 
 public class RecipeDetailListRecyclerViewAdapter extends
-        RecyclerView.Adapter<RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder>
-        implements DetailStepFragment.StepGetter {
+        RecyclerView.Adapter<RecipeDetailListRecyclerViewAdapter.RecipeDetailViewHolder>{
     private ArrayList<Step> mStepArrayList;
     private static final int INGREDIENTS = 0;
     private static final int ALL_OTHERS = 1;
@@ -49,7 +48,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
     //allowing for the onclick to be implemented by the recipe detail activity.
     //This allows communication to other fragments.
     public interface StepListener {
-        void onStepSelected(Step step, DetailStepFragment.StepGetter stepGetter);
+        void onStepSelected(Step step);
     }
 
     //this became necessary to implement because the ingredients were getting added twice
@@ -80,34 +79,8 @@ public class RecipeDetailListRecyclerViewAdapter extends
         }
     }
 
-    private int FindPositionByStep(Step s){
-        for (int i=0;i<mStepArrayList.size();i++){
-            if (s.getId()==mStepArrayList.get(i).getId()){
-                return i;
-            }
-        }
-        return -1;
-    }
 
-    @Override
-    public Step getNextStep(Step s) {
-        int position= FindPositionByStep(s);
-        if (position < mStepArrayList.size() - 1) {
-            return mStepArrayList.get(position + 1);
-        }
-        return null;
-    }
 
-    @Override
-    public Step getPreviousStep(Step s) {
-        int position= FindPositionByStep(s);
-        //I must account for the ingredients list
-        if (position >= ALL_OTHERS) {
-            return mStepArrayList.get(position - 1);
-
-        }
-        return null;
-    }
 
     @Override
     public int getItemViewType(int position) {
@@ -220,7 +193,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
 
         @Override
         public void onClick(View v) {
-            mStepListener.onStepSelected(mStep, viewAdapterClass);
+            mStepListener.onStepSelected(mStep);
 
         }
     }

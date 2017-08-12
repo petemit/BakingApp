@@ -19,4 +19,7 @@
     <string name="internet_error_msg">Cannot fetch recipes, check your internet connection</string>
     <string name="previous_step">Previous Step</string>
     <string name="next_step">Next Step</string>
+    <string name="BakingAppName">BakingApp</string>
+    <string name="dummy_measure">Cup</string>
+    <string name="dummy_quantity">1/2</string>
 </resources>

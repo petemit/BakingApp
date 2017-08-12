@@ -30,16 +30,18 @@
     <TextView
         android:id="@+id/tv_ingredients_detail_quantity"
         android:layout_width="0dp"
+        style="@style/StepTextStyleSmall"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        tools:text="1/2" />
+        tools:text="@string/dummy_quantity" />
 
     <TextView
         android:id="@+id/tv_ingredients_detail_measure"
         android:layout_width="0dp"
+        style="@style/StepTextStyleSmall"
         android:layout_height="wrap_content"
         android:layout_weight="2"
 
-        tools:text="Cup" />
+        tools:text="@string/dummy_measure" />
 </LinearLayout>
 

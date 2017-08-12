@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +33,8 @@ import java.util.ArrayList;
 
 public class RecipeDetailActivity extends AppCompatActivity implements
         RecipeDetailListRecyclerViewAdapter.StepListener,
-        RecipeDetailListRecyclerViewAdapter.ingredientsAddedInterface {
+        RecipeDetailListRecyclerViewAdapter.ingredientsAddedInterface,
+        RecipeDetailListFragment.StepGetter{
 
 
 
@@ -44,6 +46,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     Step currentStep;
     int screenWidth;
     int currentOrientation;
+    ArrayList<Step> stepArrayList;
 
     private String TAG = "RecipeDetailActivity";
 
@@ -59,6 +62,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             if (getIntent().getParcelableExtra(getString(R.string.recipe_key_bundle)) != null) {
                 setRecipe((Recipe) getIntent().
                         getParcelableExtra(getString(R.string.recipe_key_bundle)));
+                stepArrayList=getRecipe().getSteps();
                 Log.i(TAG, getRecipe().getName());
 
             }
@@ -76,7 +80,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             if (recipe!=null){
                 //return the first item of the array by default
                 Step defaultstep=(Step)recipe.getSteps().get(0);
-                onStepSelected(defaultstep,null);
+                onStepSelected(defaultstep);
 
 
             }
@@ -86,12 +90,41 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
             Step step = (Step)savedInstanceState.get(getString(R.string.step_key));
             if(step!=null) {
-                onStepSelected(step, step.getStepGetter());
+                onStepSelected(step);
             }
 
         }
 
 
+    }
+
+
+    private int FindPositionByStep(Step s){
+        for (int i=0;i<recipe.getSteps().size();i++){
+            if (s.getId()==stepArrayList.get(i).getId()){
+                return i;
+            }
+        }
+        return -1;
+    }
+    @Override
+    public Step getNextStep(Step s) {
+        int position= FindPositionByStep(s);
+        if (position < recipe.getSteps().size() - 1) {
+            return stepArrayList.get(position + 1);
+        }
+        return null;
+    }
+
+    @Override
+    public Step getPreviousStep(Step s) {
+        int position= FindPositionByStep(s);
+        //I must account for the ingredients list
+        if (position >= 1) {
+            return stepArrayList.get(position - 1);
+
+        }
+        return null;
     }
 
     public Recipe getRecipe() {
@@ -105,8 +138,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
 
     @Override
-    public void onStepSelected(Step step,
-                               DetailStepFragment.StepGetter stepGetter) {
+    public void onStepSelected(Step step) {
         if (step!=null) {
             currentStep=step;
             fragmentManager = getSupportFragmentManager();
@@ -117,9 +149,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 MasterListFragment.setExitTransition(new Fade());
             }
             Bundle bundle = new Bundle();
-            if(stepGetter!=null) {
-                step.setStepGetter(stepGetter);
-            }
+
             bundle.putSerializable(getString(R.string.step_key), step);
 
             if (!(screenWidth>getResources().getInteger(R.integer.tablet_screen_width))&&
@@ -165,15 +195,25 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
     }
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         View v = findViewById(R.id.step_fragment_placeholder);
         if (stepFragment!=null) {
+
             if (v.getVisibility()==View.VISIBLE) {
-                v.setVisibility(View.GONE);
-                getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();
-                currentStep = null;
+                if (!(screenWidth>getResources().getInteger(R.integer.tablet_screen_width))&&
+                        !((currentOrientation==
+                                getResources().getConfiguration().ORIENTATION_LANDSCAPE))) {
+
+                    v.setVisibility(View.GONE);
+                    getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();
+                    currentStep = null;
+                }
+                else{
+                    finish();
+                }
             }
             else{
                 getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();

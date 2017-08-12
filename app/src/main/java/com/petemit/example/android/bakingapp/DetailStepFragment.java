@@ -54,14 +54,10 @@ public class DetailStepFragment extends Fragment {
     Step thisStep;
     int screenWidth;
     int currentOrientation;
+    RecipeDetailListFragment.StepGetter stepGetter;
 
 
-    //This interface is implemented by the List adapter so it can provide the next and previous
-    //steps in the arraylist
-    public interface StepGetter{
-        Step getNextStep(Step s);
-        Step getPreviousStep(Step s);
-    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_step, container, false);
@@ -75,6 +71,7 @@ public class DetailStepFragment extends Fragment {
 
         screenWidth=getResources().getConfiguration().smallestScreenWidthDp;
         currentOrientation = getResources().getConfiguration().orientation;
+        stepGetter=(RecipeDetailListFragment.StepGetter)getActivity();
 
 
         Bundle bundle=getArguments();
@@ -98,7 +95,7 @@ public class DetailStepFragment extends Fragment {
                     BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
                     DataSource.Factory dataSourceFactory = new
                             DefaultDataSourceFactory(getContext(),
-                            Util.getUserAgent(getContext(), "BakingApp"));
+                            Util.getUserAgent(getContext(), getString(R.string.BakingAppName)));
                     ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
                     MediaSource videoSource = new ExtractorMediaSource(uri,
                             dataSourceFactory, extractorsFactory, null, null);
@@ -122,19 +119,14 @@ public class DetailStepFragment extends Fragment {
 
                 //try getting the previous step
                 //No step buttons if in landscape tablet mode
-                if (thisStep.getStepGetter()!=null&& (!(screenWidth>=getResources().
-                        getInteger(R.integer.tablet_screen_width))&&
-                        (!(currentOrientation==
-                                getResources().
-                                        getConfiguration().ORIENTATION_LANDSCAPE)))) {
-                    if (thisStep.getStepGetter().getPreviousStep(thisStep) != null) {
-                        previousStep = thisStep.getStepGetter().getPreviousStep(thisStep);
+                if (stepGetter!=null) {
+                    if (stepGetter.getPreviousStep(thisStep) != null) {
+                        previousStep = stepGetter.getPreviousStep(thisStep);
 
                         leftStepButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                parent.onStepSelected(previousStep, thisStep.getStepGetter()
-                                );
+                                parent.onStepSelected(previousStep);
 
                             }
                         });
@@ -144,13 +136,12 @@ public class DetailStepFragment extends Fragment {
 
                     }
                     //try getting the next step
-                    if (thisStep.getStepGetter().getNextStep(thisStep) != null) {
-                        nextStep = thisStep.getStepGetter().getNextStep(thisStep);
+                    if (stepGetter.getNextStep(thisStep) != null) {
+                        nextStep = stepGetter.getNextStep(thisStep);
                         rightStepButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                parent.onStepSelected(nextStep, thisStep.getStepGetter()
-                                );
+                                parent.onStepSelected(nextStep);
 
                             }
                         });
