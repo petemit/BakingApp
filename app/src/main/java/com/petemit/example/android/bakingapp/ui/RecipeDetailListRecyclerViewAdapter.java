@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.petemit.example.android.bakingapp.DetailStepFragment;
@@ -142,26 +143,16 @@ public class RecipeDetailListRecyclerViewAdapter extends
             context = itemView.getContext();
         }
 
+
+
         public void bindIngredients(ArrayList<Ingredient> ingredients) {
             String ingredientstrings = "";
 
             if (ingredients != null && !ingredientsAdder.getIngredientState()) {
                 for (Ingredient i : ingredients
                         ) {
-                    LinearLayout ll = (LinearLayout) LayoutInflater.from(
-                            ingredientLayout.getContext()).inflate(
-                            R.layout.tv_ingredient, null);
 
-                    TextView tv_ing = (TextView) ll.
-                            findViewById(R.id.tv_recipe_detail_ingredients);
-                    TextView tv_quant = (TextView) ll.
-                            findViewById(R.id.tv_ingredients_detail_quantity);
-                    TextView tv_measure = (TextView) ll.
-                            findViewById(R.id.tv_ingredients_detail_measure);
-                    tv_ing.setText(i.getIngredient());
-                    tv_quant.setText((i.getQuantity()));
-                    tv_measure.setText(i.getMeasure());
-                    ingredientLayout.addView(ll);
+                    ingredientLayout.addView( ingredientViewMaker(i,ingredientLayout.getContext()));
                     ingredientsAdder.setIngredientState(true);
 
 
@@ -199,4 +190,28 @@ public class RecipeDetailListRecyclerViewAdapter extends
     }
 
 
+    public static RemoteViews ingredientViewMakerRemoteViews(Ingredient i, Context context) {
+        RemoteViews remotev = new RemoteViews(context.getPackageName(),R.layout.tv_ingredient);
+        remotev.setTextViewText(R.id.tv_recipe_detail_ingredients,i.getIngredient());
+        remotev.setTextViewText(R.id.tv_ingredients_detail_quantity,i.getQuantity());
+        remotev.setTextViewText(R.id.tv_ingredients_detail_measure,i.getMeasure());
+        return remotev;
+
+    }
+    public static LinearLayout ingredientViewMaker(Ingredient i, Context context) {
+        LinearLayout ll = (LinearLayout) LayoutInflater.from(context).inflate(
+                R.layout.tv_ingredient, null);
+
+        TextView tv_ing = (TextView) ll.
+                findViewById(R.id.tv_recipe_detail_ingredients);
+        TextView tv_quant = (TextView) ll.
+                findViewById(R.id.tv_ingredients_detail_quantity);
+        TextView tv_measure = (TextView) ll.
+                findViewById(R.id.tv_ingredients_detail_measure);
+        tv_ing.setText(i.getIngredient());
+        tv_quant.setText((i.getQuantity()));
+        tv_measure.setText(i.getMeasure());
+        return ll;
+
+    }
 }

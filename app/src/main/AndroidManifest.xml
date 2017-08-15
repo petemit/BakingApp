@@ -22,6 +22,11 @@
             </meta-data>
         </receiver>
 
+        <service
+            android:name="com.petemit.example.android.bakingapp.IngredientWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" >
+        </service>
+
 
 
         <activity android:name=".MainActivity">

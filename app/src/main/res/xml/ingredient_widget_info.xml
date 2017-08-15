@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/ingredient_widget"
-    android:minHeight="40dp"
-    android:minWidth="40dp"
-    android:minResizeHeight="40dp"
-    android:minResizeWidth="40dp"
+    android:minHeight="@dimen/small_screen_card_height"
+    android:minWidth="@dimen/widget_min_width"
+    android:minResizeHeight="@dimen/small_screen_card_height"
+    android:minResizeWidth="@dimen/widget_min_width"
     android:previewImage="@drawable/ic_cake_24dp"
     android:resizeMode="vertical"
     android:widgetCategory="home_screen" />

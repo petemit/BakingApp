@@ -25,10 +25,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import com.google.gson.reflect.TypeToken;
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
+import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -76,7 +81,29 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 RemoteViews remotevs= new RemoteViews(this.getPackageName(),
                         R.layout.ingredient_widget);
                 ComponentName widget=new ComponentName(this,IngredientWidgetProvider.class);
-                remotevs.setTextViewText(R.id.tv_recipe_detail_ingredients_title, "test");
+              //  ArrayList<Ingredient> ingredients=recipe.getIngredients();
+                Intent adapterIntent = new Intent();
+                adapterIntent.setClass(getBaseContext(), IngredientWidgetService.class);
+                Type type = new TypeToken<Recipe>() {}.getType();
+                adapterIntent.putExtra(getString(R.string.recipe_key_bundle), RecipeDeserializer.
+                        convertToJsonString(recipe,type));
+
+
+                remotevs.setRemoteAdapter(R.id.ingredient_widget_listview,adapterIntent);
+
+                remotevs.setEmptyView(R.id.ingredient_widget_listview, R.id.empty);
+
+//
+//                if (ingredients != null && !this.getIngredientState()) {
+//                    for (Ingredient i : ingredients
+//                            ) {
+//                        remotevs.addView(R.id.ll_ingredient_parent,
+//                                RecipeDetailListRecyclerViewAdapter.ingredientViewMakerRemoteViews(
+//                                        i,getBaseContext()));
+//                        this.setIngredientState(true);
+//                    }
+//                }
+             //   remotevs.setTextViewText(R.id.tv_recipe_detail_ingredients_title, recipe.getName());
                 appWidgetManager.updateAppWidget(widget,remotevs);
 
                 //implementation attempt 1
