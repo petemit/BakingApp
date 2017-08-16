@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ingredient_linear_layout"
     android:layout_width="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingRight="@dimen/small_screen_card_buffer">
@@ -10,6 +12,7 @@
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+       android:duplicateParentState="true"
         android:layout_weight="3"></FrameLayout>
 
     <TextView
@@ -19,6 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="8"
         android:ellipsize="end"
+        android:duplicateParentState="true"
+        android:textIsSelectable="false"
         android:gravity="left"
         android:maxLines="5"
 
@@ -32,6 +37,7 @@
         style="@style/StepTextStyleSmall"
         android:layout_height="wrap_content"
         android:layout_weight="2"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         tools:text="@string/dummy_quantity" />
 
@@ -41,6 +47,8 @@
         style="@style/StepTextStyleSmall"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:duplicateParentState="true"
+        android:textIsSelectable="false"
         android:layout_weight="2"
 
         tools:text="@string/dummy_measure" />

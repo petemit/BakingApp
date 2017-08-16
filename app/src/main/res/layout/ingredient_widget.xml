@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/widget_ll_layout"
+    android:clickable="true"
+    android:background="@drawable/rounded_rectangle"
+    android:focusable="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-
-        <TextView
+        <Button
             android:id="@+id/tv_recipe_detail_ingredients_title"
             style="@style/CardTextStyle"
-            android:layout_width="match_parent"
+            android:background="@drawable/rounded_button"
+            android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:gravity="left"
             android:padding="@dimen/small_screen_card_buffer"
+            android:textIsSelectable="false"
             android:text="@string/ingredients"
 
 
             />
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical"-->
-            <!--android:id="@+id/ll_ingredient_parent"></LinearLayout>-->
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:duplicateParentState="true"
                 android:id="@+id/ingredient_widget_listview"></ListView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/empty"
-            android:text="empty"/>
+            android:clickable="false"
+            android:text="Choose a Recipe in BakeIt to show a Recipe here!"/>
     </LinearLayout>
-
-
-
-</LinearLayout>

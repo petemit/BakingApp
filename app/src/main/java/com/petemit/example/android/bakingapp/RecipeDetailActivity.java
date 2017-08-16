@@ -1,5 +1,6 @@
 package com.petemit.example.android.bakingapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -84,9 +85,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements
               //  ArrayList<Ingredient> ingredients=recipe.getIngredients();
                 Intent adapterIntent = new Intent();
                 adapterIntent.setClass(getBaseContext(), IngredientWidgetService.class);
-                Type type = new TypeToken<Recipe>() {}.getType();
-                adapterIntent.putExtra(getString(R.string.recipe_key_bundle), RecipeDeserializer.
-                        convertToJsonString(recipe,type));
+                String recipeJson=RecipeDeserializer.
+                        convertToJsonString(recipe,Recipe.class);
+                adapterIntent.putExtra(getString(R.string.recipe_key_bundle), recipeJson);
+
+                Intent detailActivityIntent= new Intent(this, RecipeDetailActivity.class);
+              //  detailActivityIntent.setAction(this.getString(R.string.widget_pending_intentaction));
+                detailActivityIntent.putExtra(this.getString(R.string.recipe_key_bundle),
+                        RecipeDeserializer.convertToJsonString(recipe,Recipe.class));
+                PendingIntent pendingIntent=PendingIntent.getActivity(this,0,detailActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+                remotevs.setOnClickPendingIntent(R.id.widget_ll_layout,pendingIntent);
+
 
 
                 remotevs.setRemoteAdapter(R.id.ingredient_widget_listview,adapterIntent);
@@ -103,7 +113,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 //                        this.setIngredientState(true);
 //                    }
 //                }
-             //   remotevs.setTextViewText(R.id.tv_recipe_detail_ingredients_title, recipe.getName());
+                remotevs.setTextViewText(R.id.tv_recipe_detail_ingredients_title, recipe.getName());
                 appWidgetManager.updateAppWidget(widget,remotevs);
 
                 //implementation attempt 1

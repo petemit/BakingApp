@@ -1,31 +1,47 @@
 package com.petemit.example.android.bakingapp.ui;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.petemit.example.android.bakingapp.Ingredient;
+
+import com.petemit.example.android.bakingapp.IngredientWidgetProvider;
 import com.petemit.example.android.bakingapp.R;
 import com.petemit.example.android.bakingapp.Recipe;
+import com.petemit.example.android.bakingapp.RecipeDetailActivity;
 import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by Peter on 8/14/2017.
  */
 
+//This is to populate the listview for the widget because we don't know how big it will be
 public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory {
     Context context;
     Recipe recipe;
-   public WidgetListProvider(Context context, String recipeJson){
-        this.context=context;
-       Type type = new TypeToken<Recipe>() {}.getType();
-       Recipe recipe = RecipeDeserializer.convertFromJsonString(recipeJson,type);
-        this.recipe=recipe;
+
+    public WidgetListProvider(Context context, String recipeJson) {
+        this.context = context;
+        if (recipeJson != null) {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer(context));
+
+            Gson gson = builder.create();
+            Recipe recipe = (gson.fromJson(recipeJson, Recipe.class));
+            this.recipe=recipe;
+        }
 
     }
+
     @Override
     public void onCreate() {
 
@@ -48,11 +64,24 @@ public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews remotev = new RemoteViews(context.getPackageName(),R.layout.tv_ingredient);
-        Ingredient i = (Ingredient)recipe.getIngredients().get(position);
-        remotev.setTextViewText(R.id.tv_recipe_detail_ingredients,i.getIngredient());
-        remotev.setTextViewText(R.id.tv_ingredients_detail_quantity,i.getQuantity());
-        remotev.setTextViewText(R.id.tv_ingredients_detail_measure,i.getMeasure());
+        RemoteViews remotev = new RemoteViews(context.getPackageName(), R.layout.tv_ingredient);
+        Ingredient i = (Ingredient) recipe.getIngredients().get(position);
+
+        remotev.setTextViewText(R.id.tv_recipe_detail_ingredients, i.getIngredient());
+        remotev.setTextViewText(R.id.tv_ingredients_detail_quantity, i.getQuantity());
+        remotev.setTextViewText(R.id.tv_ingredients_detail_measure, i.getMeasure());
+
+        Intent detailActivityIntent= new Intent(context, RecipeDetailActivity.class);
+        //  detailActivityIntent.setAction(this.getString(R.string.widget_pending_intentaction));
+        detailActivityIntent.putExtra(context.getString(R.string.recipe_key_bundle),
+                RecipeDeserializer.convertToJsonString(recipe,Recipe.class));
+        PendingIntent pendingIntent=PendingIntent.getActivity(context,0,
+                detailActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        remotev.setOnClickPendingIntent(R.id.ingredient_linear_layout,pendingIntent);
+
+
+
         return remotev;
     }
 
