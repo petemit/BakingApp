@@ -162,6 +162,14 @@ public class DetailStepFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(simpleExoPlayer!=null) {
+            simpleExoPlayer.stop();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if(simpleExoPlayer!=null) {

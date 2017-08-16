@@ -15,10 +15,14 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:duplicateParentState="true"
+            android:clickable="false"
+            android:layout_margin="@dimen/small_screen_card_buffer"
             android:padding="@dimen/small_screen_card_buffer"
             android:textIsSelectable="false"
-            android:text="@string/ingredients"
+            android:text="@string/bake_it"
 
 
             />
@@ -34,5 +38,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/empty"
             android:clickable="false"
-            android:text="Choose a Recipe in BakeIt to show a Recipe here!"/>
+            android:layout_gravity="center"
+            android:text="@string/empty_text_widget"/>
     </LinearLayout>

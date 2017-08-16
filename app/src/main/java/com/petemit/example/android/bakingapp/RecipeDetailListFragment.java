@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
 
@@ -27,6 +28,7 @@ public class RecipeDetailListFragment extends Fragment {
     private String TAG="RecipeDetailListFragment";
     RecipeDetailListRecyclerViewAdapter.StepListener mStepCallBack;
     ArrayList<Step> steps;
+    TextView recipeTitle;
 
 
     @Override
@@ -35,6 +37,9 @@ public class RecipeDetailListFragment extends Fragment {
         RecipeDetailActivity activity=(RecipeDetailActivity)getActivity();
         Recipe recipe=activity.getRecipe();
         activity.setIngredientState(false);
+        recipeTitle=(TextView)rootview.findViewById(R.id.
+                tv_recipe_detail_ingredients_recipe_description);
+        recipeTitle.setText(recipe.getName());
 
                 rv = (RecyclerView) rootview.findViewById(R.id.rv_recipe_detail_list);
 

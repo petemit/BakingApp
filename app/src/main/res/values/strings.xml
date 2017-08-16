@@ -25,4 +25,7 @@
     <string name="widget_recipe_id_key">widgetrecipeid</string>
     <string name="widget_ingredients_key">widgetingredients</string>
     <string name="widget_pending_intentaction">launchrecipeactivity</string>
+    <string name="bake_it">Bake It!</string>
+    <string name="empty_text_widget">Choose a Recipe in Bake It! to show a Recipe here!</string>
+    <string name="recipe_description">Recipe Description</string>
 </resources>

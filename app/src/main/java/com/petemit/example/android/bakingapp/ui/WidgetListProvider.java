@@ -64,21 +64,12 @@ public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews remotev = new RemoteViews(context.getPackageName(), R.layout.tv_ingredient);
+        RemoteViews remotev = new RemoteViews(context.getPackageName(), R.layout.tv_ingredient_widget);
         Ingredient i = (Ingredient) recipe.getIngredients().get(position);
 
         remotev.setTextViewText(R.id.tv_recipe_detail_ingredients, i.getIngredient());
         remotev.setTextViewText(R.id.tv_ingredients_detail_quantity, i.getQuantity());
         remotev.setTextViewText(R.id.tv_ingredients_detail_measure, i.getMeasure());
-
-        Intent detailActivityIntent= new Intent(context, RecipeDetailActivity.class);
-        //  detailActivityIntent.setAction(this.getString(R.string.widget_pending_intentaction));
-        detailActivityIntent.putExtra(context.getString(R.string.recipe_key_bundle),
-                RecipeDeserializer.convertToJsonString(recipe,Recipe.class));
-        PendingIntent pendingIntent=PendingIntent.getActivity(context,0,
-                detailActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        remotev.setOnClickPendingIntent(R.id.ingredient_linear_layout,pendingIntent);
 
 
 
