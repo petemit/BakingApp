@@ -1,9 +1,7 @@
 package com.petemit.example.android.bakingapp;
 
 import android.content.ComponentName;
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewAssertion;
+
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.espresso.Espresso.onData;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -50,7 +48,7 @@ public class RecipeActivityTest {
 
         //ensure that list is showing the data properly.
         onView(withId(R.id.rv_recipe_list))
-                .check(matches(hasDescendant(withText("Brownies"))));//.check(matches(hasDescendant(withText("Brownies"))));
+                .check(matches(hasDescendant(withText("Brownies"))));
     }
 
     @Test

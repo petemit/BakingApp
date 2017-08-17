@@ -27,17 +27,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements
-    LoaderManager.LoaderCallbacks<String> {
-    RecyclerView rv;
-    RecipeListRecyclerViewAdapter adapter;
-    GridLayoutManager mLayoutManager;
-    TextView errTextView;
-    int screenWidth;
-    int currentOrientation;
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+    private RecyclerView rv;
+    private RecipeListRecyclerViewAdapter adapter;
+    private GridLayoutManager mLayoutManager;
+    private TextView errTextView;
+    private int screenWidth;
+    private int currentOrientation;
 
-    static int JSONLOADER = 100;
-    int gridlength=0;
+    public static int JSONLOADER = 100;
+    private int gridlength=0;
     public final static int PORTRAIT_GRID_LENGTH=1;
     public final static int LANDSCAPE_TABLET_GRID_LENGTH=4;
 

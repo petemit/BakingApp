@@ -10,30 +10,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
+
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.TransferListener;
-import com.google.android.exoplayer2.util.Util;
 
-import java.net.URISyntaxException;
+import com.google.android.exoplayer2.util.Util;
 
 
 /**
@@ -41,19 +34,19 @@ import java.net.URISyntaxException;
  */
 
 public class DetailStepFragment extends Fragment {
-    TextView tv_recipe_instructions;
-    SimpleExoPlayerView mExoplayer;
-    SimpleExoPlayer simpleExoPlayer;
-    Button leftStepButton;
-    Button rightStepButton;
-    View leftStepLayoutView;
-    View rightStepLayoutView;
-    RecipeDetailActivity parent;
-    Step previousStep;
-    Step nextStep;
-    Step thisStep;
-    int screenWidth;
-    int currentOrientation;
+    private TextView tv_recipe_instructions;
+    private SimpleExoPlayerView mExoplayer;
+    private SimpleExoPlayer simpleExoPlayer;
+    private Button leftStepButton;
+    private Button rightStepButton;
+    private View leftStepLayoutView;
+    private View rightStepLayoutView;
+    private RecipeDetailActivity parent;
+    private Step previousStep;
+    private Step nextStep;
+    private Step thisStep;
+    private int screenWidth;
+    private int currentOrientation;
     RecipeDetailListFragment.StepGetter stepGetter;
 
 
