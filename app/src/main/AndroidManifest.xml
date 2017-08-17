@@ -42,10 +42,6 @@
         </activity>
         <activity android:name=".RecipeDetailActivity"></activity>
 
-        <provider
-            android:name=".db.generated.BakingProvider"
-            android:authorities="android.example.petemit.com.db.provider"
-            android:exported="false" />
 
     </application>
 

@@ -1,12 +1,11 @@
 package com.petemit.example.android.bakingapp;
 
-import android.content.ContentValues;
+
 import android.content.Context;
-import android.database.Cursor;
-import android.os.AsyncTask;
+
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.CursorLoader;
+
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,14 +17,11 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.petemit.example.android.bakingapp.db.BakingProvider;
+
 import com.petemit.example.android.bakingapp.ui.RecipeListRecyclerViewAdapter;
 import com.petemit.example.android.bakingapp.util.NetUtils;
 import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;

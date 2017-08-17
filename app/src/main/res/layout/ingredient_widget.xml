@@ -38,6 +38,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/empty"
             android:clickable="false"
+            style="@style/StepTextStyleSmall"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="@string/empty_text_widget"/>
     </LinearLayout>
