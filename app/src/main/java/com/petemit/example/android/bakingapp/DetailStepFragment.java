@@ -172,6 +172,8 @@ public class DetailStepFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (simpleExoPlayer != null) {
+            //it actually works just fine, I went ahead and commented out the release in pause
+            //but, I'm initializing the exoplayer in oncreate.
             simpleExoPlayer.setPlayWhenReady(true);
         }
 
@@ -183,7 +185,7 @@ public class DetailStepFragment extends Fragment {
         super.onPause();
         if (simpleExoPlayer != null) {
             setPlayerPosition(simpleExoPlayer.getCurrentPosition());
-            releasePlayer();
+            //  releasePlayer();
         }
     }
 

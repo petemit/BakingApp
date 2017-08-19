@@ -52,7 +52,6 @@ dependencies {
         supportLibVersion = '25.3.1'
     }
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.android.exoplayer:exoplayer:r2.4.2'
