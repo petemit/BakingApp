@@ -14,7 +14,6 @@ import com.petemit.example.android.bakingapp.ui.WidgetListProvider;
 
 public class IngredientWidgetService extends RemoteViewsService {
 
-
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 

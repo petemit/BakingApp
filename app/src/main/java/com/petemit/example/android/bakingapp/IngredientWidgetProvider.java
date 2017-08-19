@@ -19,6 +19,7 @@ import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 public class IngredientWidgetProvider extends AppWidgetProvider {
 
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -50,7 +51,6 @@ public class IngredientWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.e("heyck","hook");
         if (intent.getAction().equals(context.getString(R.string.widget_pending_intentaction))){
             Intent activityIntent = new Intent(context,RecipeDetailActivity.class);
             String recipeJson="";
@@ -67,7 +67,8 @@ public class IngredientWidgetProvider extends AppWidgetProvider {
                 context.startActivity(activityIntent);
             }
             else{
-                context.startActivity(new Intent(context, MainActivity.class));
+                context.startActivity(new Intent(context, MainActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         }
     }

@@ -10,9 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,13 +27,15 @@ import java.util.ArrayList;
  */
 
 public class RecipeDetailListFragment extends Fragment {
-    LinearLayoutManager mLayoutManager;
-    RecyclerView rv;
-    RecipeDetailListRecyclerViewAdapter adapter;
+    private LinearLayoutManager mLayoutManager;
+    private RecyclerView rv;
+    private RecipeDetailListRecyclerViewAdapter adapter;
     private String TAG="RecipeDetailListFragment";
-    RecipeDetailListRecyclerViewAdapter.StepListener mStepCallBack;
-    ArrayList<Step> steps;
-    TextView recipeTitle;
+    private RecipeDetailListRecyclerViewAdapter.StepListener mStepCallBack;
+    private ArrayList<Step> steps;
+    private TextView recipeTitle;
+    private ImageView recipeIv;
+    private TextView servingsTv;
 
 
     @Override
@@ -37,6 +44,27 @@ public class RecipeDetailListFragment extends Fragment {
         RecipeDetailActivity activity=(RecipeDetailActivity)getActivity();
         Recipe recipe=activity.getRecipe();
         activity.setIngredientState(false);
+        recipeIv=(ImageView)rootview.findViewById(R.id.iv_recipe);
+        servingsTv=(TextView)rootview.findViewById(R.id.tv_servings);
+
+        //will load an image if not empty
+
+        if (recipe.getImage()!=null&&!recipe.getImage().equals("")){
+            recipeIv.setVisibility(View.VISIBLE);
+            Picasso.with(getContext()).load(recipe.getImage()).fit().centerCrop()
+                    .placeholder(R.drawable.ic_image_24dp)
+                    .error(R.drawable.ic_error_outline_24dp)
+                    .into(recipeIv);
+        }
+
+        if (recipe.getServings() != null&&!recipe.getServings().equals("")) {
+
+            LinearLayout servingsLl=(LinearLayout)rootview.findViewById(
+                    R.id.ll_servings);
+            servingsLl.setVisibility(View.VISIBLE);
+            servingsTv.setText(recipe.getServings());
+
+        }
         recipeTitle=(TextView)rootview.findViewById(R.id.
                 tv_recipe_detail_ingredients_recipe_description);
         recipeTitle.setText(recipe.getName());

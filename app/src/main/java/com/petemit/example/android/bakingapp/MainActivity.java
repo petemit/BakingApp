@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_main);
         errTextView=(TextView)findViewById(R.id.internet_error_msg);
         rv = (RecyclerView) findViewById(R.id.rv_recipe_list);

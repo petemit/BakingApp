@@ -28,4 +28,8 @@
     <string name="bake_it">Bake It!</string>
     <string name="empty_text_widget">Choose a Recipe in Bake It! to show a Recipe here!</string>
     <string name="recipe_description">Recipe Description</string>
+    <string name="dummy_serving_size">5</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="player_state">PLAYERSTATE</string>
+    <string name="step_fragment_key">stepfragment</string>
 </resources>

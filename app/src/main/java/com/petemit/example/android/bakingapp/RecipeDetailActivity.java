@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,10 +13,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Fade;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import com.petemit.example.android.bakingapp.ui.RecipeDetailListRecyclerViewAdapter;
+import com.petemit.example.android.bakingapp.ui.WidgetListProvider;
 import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 import java.util.ArrayList;
@@ -42,9 +45,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
     private String TAG = "RecipeDetailActivity";
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Grab the recipe before we inflate the MasterListfragment.
         //The MasterListfragment is going to be using this
@@ -67,46 +73,67 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         screenWidth = getResources().getConfiguration().smallestScreenWidthDp;
         currentOrientation = getResources().getConfiguration().orientation;
 
-        //if using the tablet layout
-        if (screenWidth >= getResources().getInteger(R.integer.tablet_screen_width) &&
-                (currentOrientation ==
-                        getResources().getConfiguration().ORIENTATION_LANDSCAPE)) {
-            if (recipe != null) {
-                //return the first item of the array by default
-                Step defaultstep = (Step) recipe.getSteps().get(0);
-                onStepSelected(defaultstep);
-
-
-            }
-        }
 
         if (savedInstanceState != null) {
 
-            Step step = (Step) savedInstanceState.get(getString(R.string.step_key));
-            if (step != null) {
-                onStepSelected(step);
-            }
+
 
         }
 
+        fragmentManager = getSupportFragmentManager();
 
+
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        //if using the tablet layout
+        if (screenWidth >= getResources().getInteger(R.integer.tablet_screen_width) &&
+                (currentOrientation ==
+                        getResources().getConfiguration().ORIENTATION_LANDSCAPE)) {
+           if (currentStep!=null) {
+               onStepSelected(currentStep);
+           }
+           else {
+
+               if (recipe != null) {
+                   //return the first item of the array by default
+                   Step defaultstep = (Step) recipe.getSteps().get(0);
+                   onStepSelected(defaultstep);
+
+
+               }
+           }
+        }
+
+
+
         //Set the widget if you've got one:
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        ComponentName widget = new ComponentName(this, IngredientWidgetProvider.class);
+//        RemoteViews remotevsToDelete = new RemoteViews(this.getPackageName(),
+//                R.layout.ingredient_widget);
+//        remotevsToDelete.removeAllViews(R.layout.ingredient_widget);
+//        appWidgetManager.updateAppWidget(widget, remotevsToDelete);
+
         RemoteViews remotevs = new RemoteViews(this.getPackageName(),
                 R.layout.ingredient_widget);
-        ComponentName widget = new ComponentName(this, IngredientWidgetProvider.class);
+
         Intent adapterIntent = new Intent();
         adapterIntent.setClass(getBaseContext(), IngredientWidgetService.class);
         String recipeJson = RecipeDeserializer.
                 convertToJsonString(recipe, Recipe.class);
         adapterIntent.putExtra(getString(R.string.recipe_key_bundle), recipeJson);
-
         Intent detailActivityIntent = new Intent(this, IngredientWidgetProvider.class);
         detailActivityIntent.setAction(this.getString(R.string.widget_pending_intentaction));
         detailActivityIntent.putExtra(this.getString(R.string.recipe_key_bundle),
@@ -114,12 +141,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         PendingIntent pendingIntent = PendingIntent.
                 getBroadcast(this, 0, detailActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
         remotevs.setOnClickPendingIntent(R.id.widget_ll_layout, pendingIntent);
 
+        //this one line of code.. took me 4 hours.  wow.  That's ...silly.
+        adapterIntent.setData(Uri.parse(adapterIntent.toUri(Intent.URI_INTENT_SCHEME)));
         remotevs.setRemoteAdapter(R.id.ingredient_widget_listview, adapterIntent);
 
         remotevs.setEmptyView(R.id.ingredient_widget_listview, R.id.empty);
 
+        int[] ints= appWidgetManager.getAppWidgetIds(widget);
+        appWidgetManager.notifyAppWidgetViewDataChanged(ints,R.id.ingredient_widget_listview);
         remotevs.setTextViewText(R.id.tv_recipe_detail_ingredients_title, recipe.getName());
         appWidgetManager.updateAppWidget(widget, remotevs);
     }
@@ -179,7 +211,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
             if ((!(screenWidth > getResources().getInteger(R.integer.tablet_screen_width)) &&
                     !((currentOrientation ==
-                            getResources().getConfiguration().ORIENTATION_LANDSCAPE)))||currentOrientation ==
+                            getResources().getConfiguration().ORIENTATION_LANDSCAPE))) || currentOrientation ==
                     getResources().getConfiguration().ORIENTATION_LANDSCAPE) {
                 View v = findViewById(R.id.step_fragment_placeholder);
                 v.setVisibility(View.VISIBLE);
@@ -187,11 +219,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
             stepFragment.setArguments((bundle));
 
+            if (fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStackImmediate();
+            }
+
             FragmentTransaction transaction = fragmentManager.beginTransaction()
-                    .replace(R.id.step_fragment_placeholder, stepFragment);
+                    .replace(R.id.step_fragment_placeholder, stepFragment,
+                            getString(R.string.step_fragment_key));
 
 
-            transaction.addToBackStack(null);
+            transaction.addToBackStack(getString(R.string.step_fragment_key));
             transaction.commit();
         }
 
@@ -203,40 +240,58 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         if (currentStep != null) {
             outState.putSerializable(getString(R.string.step_key), currentStep);
+
+        }
+
+        if (stepFragment != null) {
+            if(getSupportFragmentManager().findFragmentByTag(getString(R.string.step_fragment_key))!=null){
+                getSupportFragmentManager().
+                        putFragment(outState, getString(R.string.step_fragment_key), stepFragment);
+            }
         }
 
 
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+          getSupportFragmentManager().getFragment(savedInstanceState, getString(R.string.step_fragment_key));
+        if(getSupportFragmentManager().
+                findFragmentByTag(getString(R.string.step_fragment_key))!=null){
+            View v =findViewById(R.id.step_fragment_placeholder);
+            v.setVisibility(View.VISIBLE);
+            stepFragment=(DetailStepFragment)getSupportFragmentManager().findFragmentByTag(
+                    getString(R.string.step_fragment_key));
+            currentStep=(Step)savedInstanceState.get(getString(R.string.step_key));
+
+        }
+
+    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
         View v = findViewById(R.id.step_fragment_placeholder);
-        if (stepFragment != null) {
+        fragmentManager = getSupportFragmentManager();
+        int stackcount = fragmentManager.getBackStackEntryCount();
+        if (stackcount > 0) {
 
-            if (v.getVisibility() == View.VISIBLE) {
-                if ((!(screenWidth > getResources().getInteger(R.integer.tablet_screen_width)) &&
-                        !((currentOrientation ==
-                                getResources().getConfiguration().ORIENTATION_LANDSCAPE)))||(
-                        (screenWidth < getResources().getInteger(R.integer.tablet_screen_width)) &&
-                                currentOrientation ==
-                        getResources().getConfiguration().ORIENTATION_LANDSCAPE)) {
-
-                    v.setVisibility(View.GONE);
-                    getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();
-                    currentStep = null;
-                } else {
-                    finish();
-                }
-            } else {
-                getSupportFragmentManager().beginTransaction().remove(stepFragment).commit();
+            if (((screenWidth >= getResources().getInteger(R.integer.tablet_screen_width)) &&
+                    ((currentOrientation ==
+                            getResources().getConfiguration().ORIENTATION_LANDSCAPE)))) {
+                fragmentManager.popBackStack();
                 finish();
-            }
 
+            } else {
+                fragmentManager.popBackStack();
+                v.setVisibility(View.GONE);
+
+            }
         } else {
             finish();
         }
+
 
     }
 
@@ -249,5 +304,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     public void setIngredientState(Boolean bool) {
         ingredientState = bool;
     }
+
+
+
 
 }

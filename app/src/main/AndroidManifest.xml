@@ -11,37 +11,35 @@
         android:roundIcon="@drawable/ic_cake_24dp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <receiver android:name=".IngredientWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="launchrecipeactivity"></action>
+                <action android:name="launchrecipeactivity" />
             </intent-filter>
 
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/ingredient_widget_info">
-
-            </meta-data>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ingredient_widget_info"></meta-data>
         </receiver>
 
         <service
-            android:name="com.petemit.example.android.bakingapp.IngredientWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" >
-        </service>
-
-
+            android:name=".IngredientWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
 
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeDetailActivity"></activity>
+        <activity android:name=".RecipeDetailActivity"
+            android:parentActivityName=".MainActivity"
 
+            ></activity>
 
     </application>
 

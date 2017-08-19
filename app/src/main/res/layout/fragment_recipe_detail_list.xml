@@ -9,7 +9,7 @@
         style="@style/CardTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:padding="@dimen/small_screen_card_buffer"
 
         tools:text="@string/recipe_description"
@@ -17,6 +17,49 @@
 
         />
 
+    <LinearLayout
+        android:id="@+id/ll_servings"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/StepTextStyleBig"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:padding="@dimen/small_screen_card_buffer"
+            android:text="Servings:"
+
+
+            />
+    <TextView
+        android:id="@+id/tv_servings"
+        style="@style/StepTextStyleBig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:padding="@dimen/small_screen_card_buffer"
+        tools:text="@string/dummy_serving_size"/>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"></FrameLayout>
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="@dimen/small_screen_card_buffer"
+        tools:text="@string/recipe_description"
+        />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

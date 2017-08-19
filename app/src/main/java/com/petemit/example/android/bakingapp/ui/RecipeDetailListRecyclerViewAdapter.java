@@ -165,7 +165,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
             mStep = step;
             title.setText(mStep.getShortDescription());
             detailtext.setText(mStep.getDescription());
-            if (step.getThumbnailURL() != null && step.getThumbnailURL() != "") {
+            if (step.getThumbnailURL() != null && !step.getThumbnailURL().equals("")){
                 Picasso.with(context).load(step.getThumbnailURL()).fit().centerCrop()
                         .placeholder(R.drawable.ic_image_24dp)
                         .error(R.drawable.ic_error_outline_24dp)

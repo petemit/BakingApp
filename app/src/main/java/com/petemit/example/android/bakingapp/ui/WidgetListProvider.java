@@ -3,6 +3,7 @@ package com.petemit.example.android.bakingapp.ui;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -29,6 +30,10 @@ public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory
     Context context;
     Recipe recipe;
 
+
+     interface currentRecipeGetter{
+       Recipe getCurrentRecipe(Recipe recipe);
+    }
     public WidgetListProvider(Context context, String recipeJson) {
         this.context = context;
         if (recipeJson != null) {
@@ -49,8 +54,11 @@ public class WidgetListProvider implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public void onDataSetChanged() {
+        Log.e("hey",recipe.getName());
+
 
     }
+
 
     @Override
     public void onDestroy() {
