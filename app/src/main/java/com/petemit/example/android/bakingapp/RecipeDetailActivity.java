@@ -23,8 +23,8 @@ import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 import java.util.ArrayList;
 
-/**
- * Created by Peter on 7/21/2017.
+/**This is a master detail flow which shows the recipe ingredients and its steps.
+ * It uses fragments to allow for side by side content.
  */
 
 public class RecipeDetailActivity extends AppCompatActivity implements

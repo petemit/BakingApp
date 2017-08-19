@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ import com.google.android.exoplayer2.util.Util;
 
 
 /**
- * Created by Peter on 7/21/2017.
+ * The fragment which handles and shows the step content
  */
 
 public class DetailStepFragment extends Fragment {
@@ -50,12 +51,13 @@ public class DetailStepFragment extends Fragment {
     private int screenWidth;
     private int currentOrientation;
     RecipeDetailListFragment.StepGetter stepGetter;
+    TrackSelector trackSelector;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             setPlayerPosition(savedInstanceState.getLong(getString(R.string.player_state)));
         }
 
@@ -65,32 +67,30 @@ public class DetailStepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_step, container, false);
 
-        tv_recipe_instructions =(TextView)rootview.findViewById(R.id.step_recipe_instructions);
-        mExoplayer=(SimpleExoPlayerView)rootview.findViewById(R.id.step_video_view);
-        leftStepButton=(Button)rootview.findViewById(R.id.previous_step_button);
-        rightStepButton=(Button)rootview.findViewById(R.id.next_step_button);
-        leftStepLayoutView=rootview.findViewById(R.id.step_left_button_layout);
-        rightStepLayoutView=rootview.findViewById(R.id.step_right_button_layout);
-        parent=(RecipeDetailActivity)getActivity();
+        tv_recipe_instructions = (TextView) rootview.findViewById(R.id.step_recipe_instructions);
+        mExoplayer = (SimpleExoPlayerView) rootview.findViewById(R.id.step_video_view);
+        leftStepButton = (Button) rootview.findViewById(R.id.previous_step_button);
+        rightStepButton = (Button) rootview.findViewById(R.id.next_step_button);
+        leftStepLayoutView = rootview.findViewById(R.id.step_left_button_layout);
+        rightStepLayoutView = rootview.findViewById(R.id.step_right_button_layout);
+        parent = (RecipeDetailActivity) getActivity();
 
-        screenWidth=getResources().getConfiguration().smallestScreenWidthDp;
+        screenWidth = getResources().getConfiguration().smallestScreenWidthDp;
         currentOrientation = getResources().getConfiguration().orientation;
-        stepGetter=(RecipeDetailListFragment.StepGetter)getActivity();
+        stepGetter = (RecipeDetailListFragment.StepGetter) getActivity();
 
 
-        Bundle bundle=getArguments();
+        Bundle bundle = getArguments();
 
-        if (bundle!=null){
-            if (bundle.get(getString(R.string.step_key))!=null){
-                thisStep =(Step)bundle.get(getString(R.string.step_key));
+        if (bundle != null) {
+            if (bundle.get(getString(R.string.step_key)) != null) {
+                thisStep = (Step) bundle.get(getString(R.string.step_key));
                 tv_recipe_instructions.setText(thisStep.getDescription());
-
-
 
 
                 //try getting the previous step
                 //No step buttons if in landscape tablet mode
-                if (stepGetter!=null) {
+                if (stepGetter != null) {
                     if (stepGetter.getPreviousStep(thisStep) != null) {
                         previousStep = stepGetter.getPreviousStep(thisStep);
 
@@ -120,22 +120,20 @@ public class DetailStepFragment extends Fragment {
                     } else {
                         rightStepLayoutView.setVisibility(View.INVISIBLE);
                     }
-                }
-                else{
+                } else {
                     leftStepLayoutView.setVisibility(View.INVISIBLE);
                     rightStepLayoutView.setVisibility(View.INVISIBLE);
                 }
 
             }
 
-            if (thisStep.getVideoURL()!=null && thisStep.getVideoURL()!=""){
+            if (!TextUtils.isEmpty(thisStep.getVideoURL())) {
                 Uri uri;
 
 
                 try {
                     uri = Uri.parse(thisStep.getVideoURL());
-                }
-                catch (ParseException u){
+                } catch (ParseException u) {
                     u.printStackTrace();
                     throw u;
                 }
@@ -148,7 +146,7 @@ public class DetailStepFragment extends Fragment {
                 MediaSource videoSource = new ExtractorMediaSource(uri,
                         dataSourceFactory, extractorsFactory, null, null);
 
-                TrackSelector trackSelector =
+                trackSelector =
                         new DefaultTrackSelector(
                                 new AdaptiveTrackSelection.Factory(bandwidthMeter));
                 simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
@@ -162,8 +160,7 @@ public class DetailStepFragment extends Fragment {
 
                 simpleExoPlayer.prepare(videoSource);
 
-            }
-            else{
+            } else {
                 mExoplayer.setVisibility(View.GONE);
             }
         }
@@ -174,6 +171,9 @@ public class DetailStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (simpleExoPlayer != null) {
+            simpleExoPlayer.setPlayWhenReady(true);
+        }
 
 
     }
@@ -181,17 +181,28 @@ public class DetailStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(simpleExoPlayer!=null) {
+        if (simpleExoPlayer != null) {
             setPlayerPosition(simpleExoPlayer.getCurrentPosition());
-            simpleExoPlayer.stop();
+            releasePlayer();
         }
     }
+
     @Override
     public void onStop() {
         super.onStop();
-        if(simpleExoPlayer!=null) {
+        if (simpleExoPlayer != null) {
+            releasePlayer();
+        }
+    }
+
+
+    private void releasePlayer() {
+        if (simpleExoPlayer != null) {
             simpleExoPlayer.stop();
             simpleExoPlayer.release();
+            simpleExoPlayer = null;
+            trackSelector = null;
+
         }
     }
 

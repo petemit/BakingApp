@@ -15,7 +15,7 @@ import com.petemit.example.android.bakingapp.RecipeDetailActivity;
 import java.util.ArrayList;
 
 /**
- * Created by Peter on 7/21/2017.
+ * Is the Recyclerview adapter for the list on the main activity which displays the available recipes
  */
 
 public class RecipeListRecyclerViewAdapter extends

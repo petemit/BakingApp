@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Peter on 7/26/2017.
+ * Is the recyclerview adapter for the steps in the recipe in RecipeDetailActivity
  */
 
 public class RecipeDetailListRecyclerViewAdapter extends

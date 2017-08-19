@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 /**
- * Created by Peter on 7/24/2017.
+ * ingredient object
  */
 
 public class Ingredient implements Serializable {

@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by Peter on 8/14/2017.
+ * Is the listview adapter for the widget
  */
 
 //This is to populate the listview for the widget because we don't know how big it will be

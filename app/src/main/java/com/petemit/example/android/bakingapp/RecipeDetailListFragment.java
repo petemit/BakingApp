@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Peter on 7/29/2017.
+ * This fragment displays the ingredients and the steps in a recyclerview
  */
 
 public class RecipeDetailListFragment extends Fragment {
@@ -49,7 +50,7 @@ public class RecipeDetailListFragment extends Fragment {
 
         //will load an image if not empty
 
-        if (recipe.getImage()!=null&&!recipe.getImage().equals("")){
+        if (!TextUtils.isEmpty(recipe.getImage())){
             recipeIv.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(recipe.getImage()).fit().centerCrop()
                     .placeholder(R.drawable.ic_image_24dp)
@@ -57,7 +58,7 @@ public class RecipeDetailListFragment extends Fragment {
                     .into(recipeIv);
         }
 
-        if (recipe.getServings() != null&&!recipe.getServings().equals("")) {
+        if (!TextUtils.isEmpty(recipe.getImage())) {
 
             LinearLayout servingsLl=(LinearLayout)rootview.findViewById(
                     R.id.ll_servings);

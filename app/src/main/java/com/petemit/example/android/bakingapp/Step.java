@@ -3,7 +3,7 @@ package com.petemit.example.android.bakingapp;
 import java.io.Serializable;
 
 /**
- * Created by Peter on 7/24/2017.
+ * Step object
  */
 
 public class Step implements Serializable {

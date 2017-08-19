@@ -14,7 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 
 /**
- * Created by Peter on 8/12/2017.
+ * This acts as a broadcast receiver for the widget, it allows the intents to work.
  */
 
 public class IngredientWidgetProvider extends AppWidgetProvider {

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,6 +27,9 @@ import com.petemit.example.android.bakingapp.util.RecipeDeserializer;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+/*
+ * the main activity displays a list of recipes to choose from using a recyclerview
+ */
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private RecyclerView rv;
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Recipe.class, new RecipeDeserializer(this));
 
-        if (data==""){
+        if (TextUtils.isEmpty(data)){
             errTextView.setVisibility(View.VISIBLE);
         }
         else {

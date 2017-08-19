@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.petemit.example.android.bakingapp.ui.WidgetListProvider;
 
 /**
- * Created by Peter on 8/14/2017.
+ * This initializes the listview with data passed from the activity
  */
 
 public class IngredientWidgetService extends RemoteViewsService {
