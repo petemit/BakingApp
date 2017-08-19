@@ -98,11 +98,8 @@ public class RecipeDetailListRecyclerViewAdapter extends
         if (position == 0) {
             holder.bindIngredients(mIngredientArrayList);
         } else {
-            if (position != getItemCount() - 1) {
                 holder.bind(mStepArrayList.get(position - 1));
-            } else {
-                holder.bind(mStepArrayList.get(position));
-            }
+
         }
 
     }
@@ -110,7 +107,7 @@ public class RecipeDetailListRecyclerViewAdapter extends
     @Override
     public int getItemCount() {
         if (mStepArrayList != null && mStepArrayList.size() > 0) {
-            return mStepArrayList.size();
+            return mStepArrayList.size()+1;
 
         } else {
             return 0;
